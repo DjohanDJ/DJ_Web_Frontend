@@ -1,0 +1,26 @@
+<div class="video-renderer-container">
+  <button
+    [routerLink]="['/watch/' + video.id]"
+    (click)="getVideoDetail()"
+    class="click-bait-button"
+  >
+    <div class="video-section">
+      <img class="video-image" src="{{ video.image_path }}" alt="" />
+    </div>
+    <div class="video-profile">
+      <div class="profile-image-container">
+        <img
+          class="profile-image"
+          src="./../../../assets/dummy-home-assets/IU-Profile.jpg"
+          alt=""
+        />
+      </div>
+      <div class="video-title">
+        {{ video.title }}
+      </div>
+    </div>
+    <div class="video-description">
+      {{ video.view_count }} views • Upload at {{ video.upload_date }}
+    </div>
+  </button>
+</div>

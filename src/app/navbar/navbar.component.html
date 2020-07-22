@@ -1,0 +1,62 @@
+<div class="navbar {{ navBarClassToggle }}">
+  <div class="user-section">
+    <button class="home-navigation-button home-active" [routerLink]="['/']">
+      <div
+        class="home-image"
+        [inlineSVG]="'./../../assets/navbar-assets/sharp-home.svg'"
+      ></div>
+      <h6 *ngIf="!display">Home</h6>
+    </button>
+    <button class="home-navigation-button" [routerLink]="['/trending']">
+      <div
+        class="fire-image"
+        [inlineSVG]="'./../../assets/navbar-assets/fire.svg'"
+      ></div>
+      <h6 *ngIf="!display">Trending</h6>
+    </button>
+    <button class="home-navigation-button">
+      <div
+        class="subscription-image"
+        [inlineSVG]="'./../../assets/navbar-assets/youtube-subscription.svg'"
+      ></div>
+      <h6 *ngIf="!display">Subscription</h6>
+    </button>
+  </div>
+  <hr *ngIf="!display" />
+  <div class="category-section">
+    <button class="home-navigation-button">
+      <div
+        class="home-image"
+        [inlineSVG]="'./../../assets/navbar-assets/round-video-library.svg'"
+      ></div>
+      <h6 *ngIf="!display">Categories</h6>
+    </button>
+    <button class="home-navigation-button">
+      <div
+        class="fire-image"
+        [inlineSVG]="
+          './../../assets/navbar-assets/baseline-card-membership.svg'
+        "
+      ></div>
+      <h6 *ngIf="!display">Membership</h6>
+    </button>
+  </div>
+  <hr *ngIf="!display" />
+  <div class="bottom-section">
+    <div class="links-section">
+      <button class="links-navigation-button">
+        <h6 *ngIf="!display">About</h6>
+      </button>
+      <button class="links-navigation-button">
+        <h6 *ngIf="!display">Contact us</h6>
+      </button>
+      <button class="links-navigation-button">
+        <h6 *ngIf="!display">Advertise</h6>
+      </button>
+      <button class="links-navigation-button">
+        <h6 *ngIf="!display">Policy & Safety</h6>
+      </button>
+    </div>
+    <h6 class="copyright-text" *ngIf="!display">&copy; 2020 DJ20-1</h6>
+  </div>
+</div>

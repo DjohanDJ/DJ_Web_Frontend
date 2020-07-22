@@ -1,0 +1,10 @@
+<div class="home-section">
+  <h4 class="main-static-text">Recommended</h4>
+  <div class="video-content">
+    <app-video-renderer
+      *ngFor="let i of videos"
+      [video]="i"
+      [videos]="videos"
+    ></app-video-renderer>
+  </div>
+</div>

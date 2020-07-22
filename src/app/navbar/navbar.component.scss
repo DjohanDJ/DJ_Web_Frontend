@@ -1,0 +1,117 @@
+.navbar {
+  width: 250px;
+  height: calc(100vh - 58px);
+  display: flex;
+  flex-direction: column;
+  left: 0;
+  top: 58px;
+  position: fixed;
+  overflow-y: hidden;
+  background-color: white;
+  z-index: 999;
+}
+
+.navbar-minim {
+  width: 65px;
+  overflow-y: unset;
+  transition: width 300ms ease-in;
+}
+
+.navbar:hover {
+  overflow-y: scroll;
+  &.navbar-minim {
+    overflow: unset;
+  }
+}
+// Mix Div
+.user-section,
+.category-section,
+.links-section {
+  padding: 5px 0px;
+}
+
+h6 {
+  color: rgb(88, 88, 88);
+}
+// First Div and Second Div
+.home-navigation-button {
+  display: flex;
+  align-items: center;
+  padding: 10px 0px 10px 0px;
+  width: 100%;
+}
+
+.home-image,
+.fire-image,
+.subscription-image {
+  width: 25px;
+  height: 25px;
+  margin-left: 20px;
+  margin-right: 20px;
+  color: rgb(88, 88, 88);
+}
+// Third Div
+.bottom-section {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  flex: 1;
+}
+
+.links-section {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-start;
+  padding: 10px;
+}
+
+.links-navigation-button {
+  margin-left: 10px;
+  padding-bottom: 5px;
+}
+
+.copyright-text {
+  margin-left: 20px;
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
+// on hover on focus jadi red
+
+.home-navigation-button:hover {
+  .home-image,
+  .fire-image,
+  .subscription-image {
+    color: red;
+    transition: color 300ms ease-in;
+  }
+  h6 {
+    font-weight: bold;
+    color: black;
+  }
+  background-color: rgb(201, 201, 201);
+}
+
+.links-navigation-button:hover {
+  h6 {
+    font-weight: bold;
+    color: black;
+  }
+}
+
+.home-navigation-button:active {
+  background-color: rgb(201, 201, 201);
+}
+// On tab
+.home-navigation-button:focus {
+  background-color: rgb(221, 221, 221);
+  .home-image,
+  .fire-image,
+  .subscription-image {
+    color: red;
+    transition: color 300ms ease-out;
+  }
+  h6 {
+    font-weight: bold;
+    color: black;
+  }
+}

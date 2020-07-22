@@ -1,0 +1,12 @@
+.content {
+  background-color: rgb(250, 250, 250);
+  margin-top: 58px;
+  margin-left: 65px;
+  position: relative;
+  min-height: calc(100vh - 58px);
+  transition: margin-left 300ms ease-in;
+  &.content-minim {
+    margin-left: 250px;
+    transition: none;
+  }
+}

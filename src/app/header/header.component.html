@@ -1,0 +1,140 @@
+<div class="main-header">
+  <div class="app-image">
+    <button (click)="toggleDisplay()" class="burger-menu-button">
+      <div
+        class="burger-menu-image"
+        [inlineSVG]="'../../assets/header-assets/hamburger-menu.svg'"
+      ></div>
+    </button>
+    <img
+      class="app-logo-image"
+      src="./../../assets/header-assets/main-logo.png"
+      alt=""
+    />
+  </div>
+  <div class="search-box">
+    <input type="text" placeholder="Search" />
+    <button class="search-button">
+      <img
+        class="search-image"
+        src="./../../assets/header-assets/search-outlined.svg"
+        alt=""
+      />
+    </button>
+  </div>
+  <div class="user-button-access">
+    <button *ngIf="loggedIn" class="add-video-button">
+      <div
+        class="user-image-access"
+        [inlineSVG]="'./../../assets/header-assets/video-plus.svg'"
+      ></div>
+    </button>
+    <button
+      *ngIf="!loggedIn"
+      (click)="changeSettingsDropdownState()"
+      class="settings-menu-button"
+    >
+      <div
+        class="user-image-access"
+        [inlineSVG]="'./../../assets/header-assets/overflow-menu-vertical.svg'"
+      ></div>
+    </button>
+    <button *ngIf="loggedIn" class="settings-menu-button">
+      <div
+        class="user-image-access"
+        [inlineSVG]="'./../../assets/header-assets/bxs-bell.svg'"
+      ></div>
+    </button>
+    <button
+      *ngIf="!loggedIn"
+      (click)="signInWithGoogle()"
+      class="burger-menu-button"
+    >
+      <div class="sign-in-image">
+        <img
+          class="user-image-access"
+          src="./../../assets/header-assets/profile.svg"
+          alt=""
+        />
+        <h6>
+          SIGN IN
+        </h6>
+      </div>
+    </button>
+    <button
+      (click)="changeDropdownState()"
+      *ngIf="loggedIn"
+      class="burger-menu-button"
+    >
+      <div>
+        <img class="user-profile-image" src="{{ user.photoUrl }}" />
+      </div>
+    </button>
+    <div
+      *ngIf="loggedIn"
+      class="{{
+        !dropdownDisplay ? 'user-dropdown-none' : ''
+      }}  user-dropdown-menu"
+    >
+      <div class="user-profile-login">
+        <div class="user-image">
+          <img class="user-profile-image" src="{{ user.photoUrl }}" />
+        </div>
+        <div class="user-attribute-login">
+          <div class="user-name">
+            <h6>{{ user.name }}</h6>
+          </div>
+          <div class="user-email">
+            <h6>{{ user.email }}</h6>
+          </div>
+        </div>
+      </div>
+      <hr />
+      <button (click)="changeSignInBoxState()" class="element-dropdown-menu">
+        <h6>Switch Account</h6>
+      </button>
+      <button (click)="signOut()" class="element-dropdown-menu">
+        <h6>Logout</h6>
+      </button>
+    </div>
+    <!-- Dropdown Settings -->
+    <div
+      *ngIf="!loggedIn"
+      class="{{
+        !settingsDropdownState ? 'settings-dropdown-none' : ''
+      }}  settings-dropdown-menu"
+    >
+      <button class="element-dropdown-menu">
+        <h6>Restrict Mode</h6>
+      </button>
+      <button class="element-dropdown-menu">
+        <h6>Location</h6>
+      </button>
+      <button class="element-dropdown-menu">
+        <h6>Keyboard Shortcut</h6>
+      </button>
+    </div>
+  </div>
+</div>
+
+<div
+  class="{{
+    signInBoxDisplay ? 'sign-in-validation' : 'sign-in-validation-none'
+  }}"
+>
+  <div class="validation-box">
+    <div class="title">
+      <h6>Are you want to manage your Google Account ?</h6>
+    </div>
+    <hr />
+    <div class="choice">
+      <button (click)="switchAccount()" class="sign-in-element">
+        <h6>Yes</h6>
+      </button>
+      <hr />
+      <button (click)="changeSignInBoxState()" class="sign-in-element">
+        <h6>No</h6>
+      </button>
+    </div>
+  </div>
+</div>
