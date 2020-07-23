@@ -6,13 +6,17 @@ import { Injectable } from '@angular/core';
 export class VideoDetailService {
   constructor() {}
 
-  videos: any;
+  videos: any = null;
 
   getVideos(): any {
     return this.videos;
   }
 
   setVideos(videos: any) {
-    this.videos = videos;
+    if (this.videos == null) {
+      this.videos = videos;
+    } else {
+      return;
+    }
   }
 }

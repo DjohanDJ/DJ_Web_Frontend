@@ -1,6 +1,7 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { Apollo } from 'apollo-angular';
 import gql from 'graphql-tag';
+import { VideoDetailService } from 'src/app/services-only/video-detail.service';
 
 export const getVideoQuery = gql`
   query getVideos {
@@ -22,7 +23,10 @@ export const getVideoQuery = gql`
   styleUrls: ['./home.component.scss'],
 })
 export class HomeComponent implements OnInit {
-  constructor(private apollo: Apollo) {}
+  constructor(
+    private apollo: Apollo,
+    private videoService: VideoDetailService
+  ) {}
 
   ngOnInit(): void {
     this.apollo
@@ -31,6 +35,7 @@ export class HomeComponent implements OnInit {
       })
       .valueChanges.subscribe((result) => {
         this.videos = result.data.videos;
+        this.videoService.setVideos(this.videos);
       });
   }
 

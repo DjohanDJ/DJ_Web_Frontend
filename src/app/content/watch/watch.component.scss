@@ -1,0 +1,44 @@
+.main-container {
+  display: flex;
+}
+
+.left-container {
+  display: flex;
+  flex-direction: column;
+}
+
+.video-player {
+  margin-top: 10px;
+  margin-left: 10px;
+}
+
+.related-video {
+  padding: 10px;
+  padding-left: 0;
+  width: 100vw;
+}
+
+.video-detail-description,
+.video-comment {
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+}
+
+// Font dkk
+.title h6 {
+  font-weight: 400;
+  font-size: larger;
+}
+
+.title {
+  margin-bottom: 10px;
+}
+
+.mini-description {
+  margin-bottom: 10px;
+}
+
+.mini-description h6 {
+  color: grey;
+}

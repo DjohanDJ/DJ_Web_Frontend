@@ -18,6 +18,8 @@ import {
 import { GoogleLoginProvider } from 'angularx-social-login';
 import { GraphQLModule } from './graphql.module';
 import { WatchComponent } from './content/watch/watch.component';
+import { ResultsComponent } from './content/results/results.component';
+import { VideoRendererLandscapeComponent } from './content/results/video-renderer-landscape/video-renderer-landscape.component';
 
 @NgModule({
   declarations: [
@@ -29,6 +31,8 @@ import { WatchComponent } from './content/watch/watch.component';
     TrendingComponent,
     VideoRendererComponent,
     WatchComponent,
+    ResultsComponent,
+    VideoRendererLandscapeComponent,
   ],
   imports: [
     BrowserModule,

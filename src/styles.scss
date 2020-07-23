@@ -37,3 +37,9 @@ hr {
   border-left: none;
   border-right: none;
 }
+
+.separator {
+  border-left: 1px solid darkgrey;
+  margin: 10px;
+  min-height: calc(100vh - 79px);
+}

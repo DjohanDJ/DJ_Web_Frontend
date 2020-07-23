@@ -1,1 +1,23 @@
-<video controls autoplay="true" src="{{ selectedVideo.video_path }}"></video>
+<div class="main-container">
+  <div class="left-container">
+    <div class="video-player">
+      <video controls autoplay src="{{ selectedVideo.video_path }}"></video>
+    </div>
+    <div class="video-detail-description">
+      <div class="title">
+        <h6>{{ selectedVideo.title }}</h6>
+      </div>
+      <div class="mini-description">
+        <h6>
+          Uploaded at {{ selectedVideo.upload_date }} •
+          {{ selectedVideo.view_count }} views
+        </h6>
+      </div>
+    </div>
+    <div class="video-comment">Comment Section</div>
+  </div>
+  <div class="separator"></div>
+  <div class="related-video">
+    Dummy First
+  </div>
+</div>

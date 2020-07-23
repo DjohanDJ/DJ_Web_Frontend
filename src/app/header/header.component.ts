@@ -1,6 +1,7 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { SocialAuthService, SocialUser } from 'angularx-social-login';
 import { GoogleLoginProvider } from 'angularx-social-login';
+import { VideoDetailService } from '../services-only/video-detail.service';
 
 @Component({
   selector: 'app-header',
@@ -71,5 +72,16 @@ export class HeaderComponent implements OnInit {
   settingsDropdownState = false;
   changeSettingsDropdownState() {
     this.settingsDropdownState = !this.settingsDropdownState;
+  }
+
+  booleanSearch: boolean = false;
+  searchQuery: string = '';
+  onTypeSearchBox(value: string) {
+    this.searchQuery = value;
+    if (this.searchQuery != '') {
+      this.booleanSearch = true;
+    } else {
+      this.booleanSearch = false;
+    }
   }
 }

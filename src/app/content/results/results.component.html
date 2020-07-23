@@ -1,0 +1,9 @@
+<div class="home-section">
+  <div class="video-content">
+    <app-video-renderer-landscape
+      *ngFor="let i of videos"
+      [video]="i"
+      [videos]="videos"
+    ></app-video-renderer-landscape>
+  </div>
+</div>

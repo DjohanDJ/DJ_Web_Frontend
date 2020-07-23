@@ -13,8 +13,18 @@
     />
   </div>
   <div class="search-box">
-    <input type="text" placeholder="Search" />
-    <button class="search-button">
+    <input
+      type="text"
+      placeholder="Search"
+      #box
+      (keyup)="onTypeSearchBox(box.value)"
+    />
+    <button
+      *ngIf="booleanSearch"
+      [routerLink]="['/results']"
+      [queryParams]="{ search_query: searchQuery }"
+      class="search-button"
+    >
       <img
         class="search-image"
         src="./../../assets/header-assets/search-outlined.svg"
