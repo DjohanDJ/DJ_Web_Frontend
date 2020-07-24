@@ -1,7 +1,7 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { SocialAuthService, SocialUser } from 'angularx-social-login';
 import { GoogleLoginProvider } from 'angularx-social-login';
-import { VideoDetailService } from '../services-only/video-detail.service';
+import { UserSessionService } from '../services-only/user-session.service';
 
 @Component({
   selector: 'app-header',
@@ -9,7 +9,10 @@ import { VideoDetailService } from '../services-only/video-detail.service';
   styleUrls: ['./header.component.scss'],
 })
 export class HeaderComponent implements OnInit {
-  constructor(private authService: SocialAuthService) {}
+  constructor(
+    private authService: SocialAuthService,
+    private userSession: UserSessionService
+  ) {}
 
   @Input() display: boolean;
 
@@ -34,6 +37,7 @@ export class HeaderComponent implements OnInit {
   }
 
   signOut(): void {
+    this.userSession.setCurrentUser(null);
     this.authService.signOut();
     this.dropdownDisplay = false;
   }
@@ -46,6 +50,7 @@ export class HeaderComponent implements OnInit {
     this.authService.authState.subscribe((user) => {
       this.user = user;
       this.loggedIn = user != null;
+      this.userSession.setCurrentUser(this.user);
     });
   }
 
