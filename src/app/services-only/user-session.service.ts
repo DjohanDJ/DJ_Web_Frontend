@@ -7,6 +7,7 @@ export class UserSessionService {
   constructor() {}
 
   currentUser: any = null;
+  currentUserInDB: any = null;
 
   setCurrentUser(user: any) {
     this.currentUser = user;
@@ -14,5 +15,13 @@ export class UserSessionService {
 
   getCurrentUser() {
     return this.currentUser;
+  }
+
+  setCurrentUserDB(user: any) {
+    this.currentUserInDB = user;
+  }
+
+  getCurrentUserDB() {
+    return this.currentUserInDB;
   }
 }
