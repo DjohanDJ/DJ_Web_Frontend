@@ -57,7 +57,7 @@
     </button>
     <button
       *ngIf="!loggedIn"
-      (click)="signInWithGoogle()"
+      (click)="changeStateLoginBox()"
       class="burger-menu-button"
     >
       <div class="sign-in-image">
@@ -144,6 +144,26 @@
       <hr />
       <button (click)="changeSignInBoxState()" class="sign-in-element">
         <h6>No</h6>
+      </button>
+    </div>
+  </div>
+</div>
+
+<div
+  class="{{ loginBoxDisplay ? 'login-validation' : 'login-validation-none' }}"
+>
+  <div class="validation-box">
+    <div class="title">
+      <h6>Sign In</h6>
+    </div>
+    <hr />
+    <div class="choice">
+      <button (click)="signInWithGoogle()" class="sign-in-element">
+        <h6>Yes</h6>
+      </button>
+      <hr />
+      <button (click)="changeStateLoginBox()" class="sign-in-element">
+        <h6>Cancel</h6>
       </button>
     </div>
   </div>

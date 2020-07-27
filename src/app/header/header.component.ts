@@ -89,4 +89,9 @@ export class HeaderComponent implements OnInit {
       this.booleanSearch = false;
     }
   }
+
+  loginBoxDisplay: boolean = false;
+  changeStateLoginBox() {
+    this.loginBoxDisplay = !this.loginBoxDisplay;
+  }
 }

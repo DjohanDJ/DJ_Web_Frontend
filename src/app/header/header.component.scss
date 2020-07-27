@@ -281,3 +281,25 @@ h6 {
     opacity: 0;
   }
 }
+
+// Modal for sign in
+.login-validation {
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.603);
+  position: absolute;
+  z-index: 9999;
+  top: -58px;
+  bottom: 0px;
+}
+
+.login-validation-none {
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.603);
+  position: absolute;
+  z-index: 9999;
+  top: -58px;
+  bottom: 0px;
+  display: none;
+}
