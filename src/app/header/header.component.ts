@@ -18,8 +18,20 @@ export const searchUserByEmail = gql`
 `;
 
 export const createUser = gql`
-  mutation createUser($newUser: NewUser!) {
-    createUser(input: $newUser) {
+  mutation createUser(
+    $username: String!
+    $email: String!
+    $user_password: String!
+    $channel_name: String!
+  ) {
+    createUser(
+      input: {
+        username: $username
+        email: $email
+        user_password: $user_password
+        channel_name: $channel_name
+      }
+    ) {
       id
       username
       email
@@ -88,12 +100,6 @@ export class HeaderComponent implements OnInit {
       if (this.searchForUserState) {
         this.searchForUser();
       }
-      if (this.currentUserinDB == null) {
-        // Ga ada di DB, jadi create at db disini
-        // console.log('A');
-        // this.createNewUser();
-        // console.log('B');
-      }
     });
   }
 
@@ -139,6 +145,7 @@ export class HeaderComponent implements OnInit {
   }
 
   searchForUserState: boolean = false;
+
   searchForUser() {
     // cek ke db usenya ada/engga
     this.searchEmail = this.user.email;
@@ -151,6 +158,12 @@ export class HeaderComponent implements OnInit {
       })
       .valueChanges.subscribe((result) => {
         this.currentUserinDB = result.data.searchUserByEmail[0];
+        // console.log(this.currentUserinDB);
+        if (this.currentUserinDB == null) {
+          // this.isCurrentUserExist = true;
+          // console.log('A' + this.isCurrentUserExist);
+          this.createNewUser();
+        }
         this.userSession.setCurrentUserDB(this.currentUserinDB);
       });
   }
@@ -158,26 +171,23 @@ export class HeaderComponent implements OnInit {
   currentUserinDB: any;
   searchEmail: string;
 
+  isCurrentUserExist: boolean = false;
   // new user
-
-  newUser: {
-    username: 'asd';
-    email: 'asd';
-    user_password: 'asd';
-    channel_name: 'asd';
-  };
 
   createNewUser() {
     // console.log('C');
     this.apollo
-      .watchQuery<any>({
-        query: createUser,
+      .mutate({
+        mutation: createUser,
         variables: {
-          newUser: this.newUser,
+          username: this.user.name,
+          email: this.user.email,
+          user_password: 'None',
+          channel_name: this.user.name,
         },
       })
-      .valueChanges.subscribe((result) => {
-        console.log(result);
+      .subscribe((result) => {
+        // console.log(result);
       });
   }
 }
