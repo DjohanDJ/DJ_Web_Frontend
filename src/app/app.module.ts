@@ -20,6 +20,7 @@ import { GraphQLModule } from './graphql.module';
 import { WatchComponent } from './content/watch/watch.component';
 import { ResultsComponent } from './content/results/results.component';
 import { VideoRendererLandscapeComponent } from './content/results/video-renderer-landscape/video-renderer-landscape.component';
+import { RestrictioningComponent } from './header/restrictioning/restrictioning.component';
 
 @NgModule({
   declarations: [
@@ -33,6 +34,7 @@ import { VideoRendererLandscapeComponent } from './content/results/video-rendere
     WatchComponent,
     ResultsComponent,
     VideoRendererLandscapeComponent,
+    RestrictioningComponent,
   ],
   imports: [
     BrowserModule,

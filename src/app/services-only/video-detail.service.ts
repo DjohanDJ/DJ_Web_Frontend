@@ -6,7 +6,10 @@ import { Injectable } from '@angular/core';
 export class VideoDetailService {
   constructor() {}
 
+  isRestriction: boolean = false;
+
   videos: any = null;
+  restrictedVideos: any = null;
 
   getVideos(): any {
     return this.videos;
@@ -18,5 +21,13 @@ export class VideoDetailService {
     } else {
       return;
     }
+  }
+
+  changeRestriction(meanState: boolean) {
+    this.isRestriction = meanState;
+  }
+
+  getRestrictionState(): boolean {
+    return this.isRestriction;
   }
 }

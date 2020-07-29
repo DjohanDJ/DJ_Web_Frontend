@@ -4,6 +4,7 @@ import { GoogleLoginProvider } from 'angularx-social-login';
 import { UserSessionService } from '../services-only/user-session.service';
 import { Apollo } from 'apollo-angular';
 import gql from 'graphql-tag';
+import { VideoDetailService } from '../services-only/video-detail.service';
 
 export const searchUserByEmail = gql`
   query searchUser($searchEmail: String!) {
@@ -53,7 +54,8 @@ export class HeaderComponent implements OnInit {
   constructor(
     private authService: SocialAuthService,
     private userSession: UserSessionService,
-    private apollo: Apollo
+    private apollo: Apollo,
+    private videoService: VideoDetailService
   ) {}
 
   @Input() display: boolean;
@@ -178,7 +180,6 @@ export class HeaderComponent implements OnInit {
   // new user
 
   createNewUser() {
-    // console.log('C');
     this.apollo
       .mutate({
         mutation: createUser,
@@ -191,5 +192,22 @@ export class HeaderComponent implements OnInit {
         },
       })
       .subscribe((result) => {});
+  }
+
+  restrictionToggle: boolean = false;
+  // restriction mode
+  changeRestrictionToggleState() {
+    this.restrictionToggle = !this.restrictionToggle;
+    this.settingsDropdownState = false;
+  }
+
+  noRestriction() {
+    this.restrictionToggle = false;
+    this.videoService.changeRestriction(false);
+  }
+
+  restrictionOnlyKids() {
+    this.restrictionToggle = false;
+    this.videoService.changeRestriction(true);
   }
 }

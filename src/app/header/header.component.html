@@ -118,7 +118,11 @@
         !settingsDropdownState ? 'settings-dropdown-none' : ''
       }}  settings-dropdown-menu"
     >
-      <button class="element-dropdown-menu">
+      <button
+        [routerLink]="['/restrictioning']"
+        (click)="changeRestrictionToggleState()"
+        class="element-dropdown-menu"
+      >
         <h6>Restrict Mode</h6>
       </button>
       <button class="element-dropdown-menu">
@@ -168,6 +172,34 @@
       <hr />
       <button (click)="changeStateLoginBox()" class="sign-in-element">
         <h6>Cancel</h6>
+      </button>
+    </div>
+  </div>
+</div>
+
+<div
+  class="{{ restrictionToggle ? 'login-validation' : 'login-validation-none' }}"
+>
+  <div class="validation-box">
+    <div class="title">
+      <h6>Sign In</h6>
+    </div>
+    <hr />
+    <div class="choice">
+      <button
+        [routerLink]="['']"
+        (click)="restrictionOnlyKids()"
+        class="sign-in-element"
+      >
+        <h6>Only for kids</h6>
+      </button>
+      <hr />
+      <button
+        [routerLink]="['']"
+        (click)="noRestriction()"
+        class="sign-in-element"
+      >
+        <h6>No Restriction</h6>
       </button>
     </div>
   </div>

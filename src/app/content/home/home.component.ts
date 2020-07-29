@@ -4,8 +4,8 @@ import gql from 'graphql-tag';
 import { VideoDetailService } from 'src/app/services-only/video-detail.service';
 
 export const getVideoQuery = gql`
-  query getVideos {
-    videos {
+  query searchHomeVideos($isKid: Boolean!) {
+    searchHomeVideosManager(isKid: $isKid) {
       id
       title
       image_path
@@ -14,6 +14,7 @@ export const getVideoQuery = gql`
       upload_date
       video_path
       user_id
+      restriction
     }
   }
 `;
@@ -33,10 +34,16 @@ export class HomeComponent implements OnInit {
     this.apollo
       .watchQuery<any>({
         query: getVideoQuery,
+        variables: {
+          isKid: this.videoService.getRestrictionState(),
+        },
       })
       .valueChanges.subscribe((result) => {
-        this.videos = result.data.videos;
+        // console.log(this.videoService.getRestrictionState());
+        // console.log(result.data);
+        this.videos = result.data.searchHomeVideosManager;
         this.videoService.setVideos(this.videos);
+        // console.log(this.videos);
       });
   }
 

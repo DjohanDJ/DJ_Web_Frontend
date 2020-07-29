@@ -239,6 +239,9 @@ h6 {
   width: 50%;
   padding: 10px;
   margin: 10px;
+}
+
+.sign-in-element h6 {
   transform: rotateZ(360deg);
   animation: rotateButton 1000ms normal;
 }

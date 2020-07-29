@@ -31,6 +31,7 @@ export class VideoRendererComponent implements OnInit {
     upload_date: string;
     video_path: string;
     user_id: number;
+    restriction: string;
   };
 
   constructor(

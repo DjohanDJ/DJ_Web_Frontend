@@ -45,16 +45,26 @@
   <div class="bottom-section">
     <div class="links-section">
       <button class="links-navigation-button">
-        <h6 *ngIf="!display">About</h6>
+        <a href="https://www.youtube.com/about/">
+          <h6 *ngIf="!display">About</h6>
+        </a>
       </button>
       <button class="links-navigation-button">
-        <h6 *ngIf="!display">Contact us</h6>
+        <a href="https://www.youtube.com/t/contact_us">
+          <h6 *ngIf="!display">Contact us</h6>
+        </a>
       </button>
       <button class="links-navigation-button">
-        <h6 *ngIf="!display">Advertise</h6>
+        <a href="https://www.youtube.com/ads/">
+          <h6 *ngIf="!display">Advertise</h6>
+        </a>
       </button>
       <button class="links-navigation-button">
-        <h6 *ngIf="!display">Policy & Safety</h6>
+        <a
+          href="https://www.youtube.com/howyoutubeworks/policies/community-guidelines/"
+        >
+          <h6 *ngIf="!display">Policy & Safety</h6>
+        </a>
       </button>
     </div>
     <h6 class="copyright-text" *ngIf="!display">&copy; 2020 DJ20-1</h6>
