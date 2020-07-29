@@ -23,6 +23,7 @@ export const createUser = gql`
     $email: String!
     $user_password: String!
     $channel_name: String!
+    $user_image: String!
   ) {
     createUser(
       input: {
@@ -30,6 +31,7 @@ export const createUser = gql`
         email: $email
         user_password: $user_password
         channel_name: $channel_name
+        user_image: $user_image
       }
     ) {
       id
@@ -37,6 +39,7 @@ export const createUser = gql`
       email
       user_password
       channel_name
+      user_image
     }
   }
 `;
@@ -184,10 +187,9 @@ export class HeaderComponent implements OnInit {
           email: this.user.email,
           user_password: 'None',
           channel_name: this.user.name,
+          user_image: this.user.photoUrl,
         },
       })
-      .subscribe((result) => {
-        // console.log(result);
-      });
+      .subscribe((result) => {});
   }
 }

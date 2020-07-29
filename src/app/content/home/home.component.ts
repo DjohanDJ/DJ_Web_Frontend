@@ -13,6 +13,7 @@ export const getVideoQuery = gql`
       view_count
       upload_date
       video_path
+      user_id
     }
   }
 `;

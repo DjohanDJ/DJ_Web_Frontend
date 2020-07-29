@@ -24,6 +24,7 @@
       [routerLink]="['/results']"
       [queryParams]="{ search_query: searchQuery }"
       class="search-button"
+      (click)="box.value = ''"
     >
       <img
         class="search-image"
@@ -100,6 +101,9 @@
         </div>
       </div>
       <hr />
+      <button class="element-dropdown-menu">
+        <h6>View Profile</h6>
+      </button>
       <button (click)="changeSignInBoxState()" class="element-dropdown-menu">
         <h6>Switch Account</h6>
       </button>
