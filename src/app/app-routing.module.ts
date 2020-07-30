@@ -5,6 +5,7 @@ import { TrendingComponent } from './content/trending/trending.component';
 import { WatchComponent } from './content/watch/watch.component';
 import { ResultsComponent } from './content/results/results.component';
 import { RestrictioningComponent } from './header/restrictioning/restrictioning.component';
+import { ChannelComponent } from './content/channel/channel.component';
 
 const routes: Routes = [
   { path: '', component: HomeComponent },
@@ -12,6 +13,7 @@ const routes: Routes = [
   { path: 'watch/:id', component: WatchComponent },
   { path: 'results', component: ResultsComponent },
   { path: 'restrictioning', component: RestrictioningComponent },
+  { path: 'channel/:id', component: ChannelComponent },
 ];
 
 @NgModule({

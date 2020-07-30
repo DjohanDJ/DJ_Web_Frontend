@@ -21,6 +21,7 @@ import { WatchComponent } from './content/watch/watch.component';
 import { ResultsComponent } from './content/results/results.component';
 import { VideoRendererLandscapeComponent } from './content/results/video-renderer-landscape/video-renderer-landscape.component';
 import { RestrictioningComponent } from './header/restrictioning/restrictioning.component';
+import { ChannelComponent } from './content/channel/channel.component';
 
 @NgModule({
   declarations: [
@@ -35,6 +36,7 @@ import { RestrictioningComponent } from './header/restrictioning/restrictioning.
     ResultsComponent,
     VideoRendererLandscapeComponent,
     RestrictioningComponent,
+    ChannelComponent,
   ],
   imports: [
     BrowserModule,

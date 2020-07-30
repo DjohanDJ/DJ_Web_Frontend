@@ -14,6 +14,7 @@ export const searchUserByEmail = gql`
       email
       user_password
       channel_name
+      channel_banner
     }
   }
 `;
@@ -53,7 +54,7 @@ export const createUser = gql`
 export class HeaderComponent implements OnInit {
   constructor(
     private authService: SocialAuthService,
-    private userSession: UserSessionService,
+    public userSession: UserSessionService,
     private apollo: Apollo,
     private videoService: VideoDetailService
   ) {}
@@ -199,6 +200,7 @@ export class HeaderComponent implements OnInit {
   changeRestrictionToggleState() {
     this.restrictionToggle = !this.restrictionToggle;
     this.settingsDropdownState = false;
+    this.dropdownDisplay = false;
   }
 
   noRestriction() {
@@ -209,5 +211,13 @@ export class HeaderComponent implements OnInit {
   restrictionOnlyKids() {
     this.restrictionToggle = false;
     this.videoService.changeRestriction(true);
+  }
+
+  //keybard shortcut list
+  shortcutListState: boolean = false;
+  changeShortcutState() {
+    this.shortcutListState = !this.shortcutListState;
+    this.settingsDropdownState = false;
+    this.dropdownDisplay = false;
   }
 }

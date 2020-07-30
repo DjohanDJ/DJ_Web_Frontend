@@ -1,0 +1,88 @@
+<div class="channel-container">
+  <img
+    class="banner-image"
+    src="{{
+      userSession.getCurrentUserDB()
+        ? userSession.getCurrentUserDB().channel_banner
+        : ''
+    }}"
+    alt=""
+  />
+  <div class="user-container">
+    <div class="user-items">
+      <img
+        class="user-image"
+        src="{{
+          userSession.getCurrentUser()
+            ? userSession.getCurrentUser().photoUrl
+            : ''
+        }}"
+        alt=""
+      />
+      <div class="user-identity">
+        <h6>
+          {{
+            userSession.getCurrentUser()
+              ? userSession.getCurrentUser().name
+              : ""
+          }}
+        </h6>
+        <h6 class="subscriber">
+          4.2M Subscribers
+        </h6>
+      </div>
+    </div>
+    <button class="subscribe-button">
+      <h6>SUBSCRIBE</h6>
+    </button>
+  </div>
+  <div class="tab-container">
+    <button
+      (click)="changeHomeState()"
+      class="tab-item {{ homeState ? 'tab-item-focus' : '' }}"
+    >
+      <h6>HOME</h6>
+    </button>
+    <button
+      (click)="changeVideosState()"
+      class="tab-item {{ videosState ? 'tab-item-focus' : '' }}"
+    >
+      <h6>VIDEOS</h6>
+    </button>
+    <button
+      (click)="changePlaylistState()"
+      class="tab-item {{ playlistState ? 'tab-item-focus' : '' }}"
+    >
+      <h6>PLAYLIST</h6>
+    </button>
+    <button
+      (click)="changeCommunityState()"
+      class="tab-item {{ communityState ? 'tab-item-focus' : '' }}"
+    >
+      <h6>COMMUNITY</h6>
+    </button>
+    <button
+      (click)="changeAboutState()"
+      class="tab-item {{ aboutState ? 'tab-item-focus' : '' }}"
+    >
+      <h6>ABOUT</h6>
+    </button>
+  </div>
+  <div class="items-container">
+    <div *ngIf="homeState" class="home">
+      this is home
+    </div>
+    <div *ngIf="videosState" class="videos">
+      this is videos
+    </div>
+    <div *ngIf="playlistState" class="playlist">
+      this is playlist
+    </div>
+    <div *ngIf="communityState" class="community">
+      this is community
+    </div>
+    <div *ngIf="aboutState" class="about">
+      this is about
+    </div>
+  </div>
+</div>

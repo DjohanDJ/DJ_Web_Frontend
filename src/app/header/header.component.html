@@ -101,11 +101,30 @@
         </div>
       </div>
       <hr />
-      <button class="element-dropdown-menu">
-        <h6>View Profile</h6>
+      <button
+        [routerLink]="[
+          'channel/' +
+            (userSession.getCurrentUserDB()
+              ? userSession.getCurrentUserDB().id
+              : '')
+        ]"
+        (click)="changeDropdownState()"
+        class="element-dropdown-menu"
+      >
+        <h6>Your Channel</h6>
       </button>
       <button (click)="changeSignInBoxState()" class="element-dropdown-menu">
         <h6>Switch Account</h6>
+      </button>
+      <button
+        [routerLink]="['/restrictioning']"
+        (click)="changeRestrictionToggleState()"
+        class="element-dropdown-menu"
+      >
+        <h6>Restrict Mode</h6>
+      </button>
+      <button (click)="changeShortcutState()" class="element-dropdown-menu">
+        <h6>Keyboard Shortcut</h6>
       </button>
       <button (click)="signOut()" class="element-dropdown-menu">
         <h6>Logout</h6>
@@ -128,7 +147,7 @@
       <button class="element-dropdown-menu">
         <h6>Location</h6>
       </button>
-      <button class="element-dropdown-menu">
+      <button (click)="changeShortcutState()" class="element-dropdown-menu">
         <h6>Keyboard Shortcut</h6>
       </button>
     </div>
@@ -182,7 +201,7 @@
 >
   <div class="validation-box">
     <div class="title">
-      <h6>Sign In</h6>
+      <h6>Manage Restriction</h6>
     </div>
     <hr />
     <div class="choice">
@@ -200,6 +219,28 @@
         class="sign-in-element"
       >
         <h6>No Restriction</h6>
+      </button>
+    </div>
+  </div>
+</div>
+
+<div
+  class="{{ shortcutListState ? 'login-validation' : 'login-validation-none' }}"
+>
+  <div class="validation-boxK">
+    <div class="title">
+      <h6>Keyboard Shortcut Lists</h6>
+    </div>
+    <hr />
+    <div class="choiceK">
+      <h6> j - backward 10 second</h6>
+      <h6> k - play or pause video</h6>
+      <h6> l - forward 10 second</h6>
+      <h6> f - fullscreen mode</h6>
+      <h6> ↑ - up the video volume</h6>
+      <h6> ↓ - low the video volume</h6>
+      <button (click)="changeShortcutState()" class="sign-in-element">
+        <h6>I get it!</h6>
       </button>
     </div>
   </div>

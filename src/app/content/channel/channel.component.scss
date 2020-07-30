@@ -1,0 +1,91 @@
+.channel-container {
+  display: flex;
+  flex-direction: column;
+}
+
+.banner-image {
+  width: 100%;
+}
+
+.user-container {
+  width: 100%;
+  height: 17vh;
+  display: flex;
+  align-items: center;
+  padding-left: 120px;
+  padding-right: 120px;
+  justify-content: space-between;
+}
+
+.user-items {
+  display: flex;
+  align-items: center;
+}
+
+.user-identity {
+  display: flex;
+  flex-direction: column;
+  margin-left: 15px;
+}
+
+.user-identity h6 {
+  font-size: larger;
+}
+
+.user-identity .subscriber {
+  color: grey;
+  font-size: medium;
+}
+
+.user-image {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+}
+
+.subscribe-button {
+  background-color: rgb(230, 0, 0);
+  padding: 10px;
+  border-radius: 2px;
+}
+
+.subscribe-button h6 {
+  color: white;
+}
+
+.items-container {
+  width: 100%;
+  min-height: calc(100vh - 17vh - 59px - 40.5vh);
+  background-color: rgb(240, 240, 240);
+  padding-left: 120px;
+  padding-right: 120px;
+}
+
+.tab-container {
+  display: flex;
+  flex: 1;
+  height: 5vh;
+  width: 100%;
+  justify-content: center;
+}
+
+.tab-item {
+  width: 15%;
+  padding: 10px;
+  &.tab-item-focus {
+    border-bottom: 2px solid rgb(44, 44, 44);
+    h6 {
+      color: black;
+      font-weight: 500;
+    }
+  }
+}
+
+.tab-item h6 {
+  color: rgb(87, 87, 87);
+}
+
+.tab-item:hover {
+  transition: background-color 500ms ease;
+  background-color: rgb(194, 194, 194);
+}
