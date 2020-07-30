@@ -34,7 +34,16 @@
     </button>
   </div>
   <div class="user-button-access">
-    <button *ngIf="loggedIn" class="add-video-button">
+    <button
+      [routerLink]="
+        ['upload-video/'] +
+        (userSession.getCurrentUserDB()
+          ? userSession.getCurrentUserDB().id
+          : '')
+      "
+      *ngIf="loggedIn"
+      class="add-video-button"
+    >
       <div
         class="user-image-access"
         [inlineSVG]="'./../../assets/header-assets/video-plus.svg'"
@@ -113,7 +122,11 @@
       >
         <h6>Your Channel</h6>
       </button>
-      <button (click)="changeSignInBoxState()" class="element-dropdown-menu">
+      <button
+        [routerLink]="['']"
+        (click)="changeSignInBoxState()"
+        class="element-dropdown-menu"
+      >
         <h6>Switch Account</h6>
       </button>
       <button
@@ -126,7 +139,11 @@
       <button (click)="changeShortcutState()" class="element-dropdown-menu">
         <h6>Keyboard Shortcut</h6>
       </button>
-      <button (click)="signOut()" class="element-dropdown-menu">
+      <button
+        [routerLink]="['']"
+        (click)="signOut()"
+        class="element-dropdown-menu"
+      >
         <h6>Logout</h6>
       </button>
     </div>

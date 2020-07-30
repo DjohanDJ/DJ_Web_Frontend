@@ -6,6 +6,8 @@ import { WatchComponent } from './content/watch/watch.component';
 import { ResultsComponent } from './content/results/results.component';
 import { RestrictioningComponent } from './header/restrictioning/restrictioning.component';
 import { ChannelComponent } from './content/channel/channel.component';
+import { UploadVideoComponent } from './content/upload-video/upload-video.component';
+import { SubscriptionComponent } from './content/subscription/subscription.component';
 
 const routes: Routes = [
   { path: '', component: HomeComponent },
@@ -14,6 +16,8 @@ const routes: Routes = [
   { path: 'results', component: ResultsComponent },
   { path: 'restrictioning', component: RestrictioningComponent },
   { path: 'channel/:id', component: ChannelComponent },
+  { path: 'upload-video/:user_id', component: UploadVideoComponent },
+  { path: 'subscription', component: SubscriptionComponent },
 ];
 
 @NgModule({

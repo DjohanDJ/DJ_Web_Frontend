@@ -22,6 +22,8 @@ import { ResultsComponent } from './content/results/results.component';
 import { VideoRendererLandscapeComponent } from './content/results/video-renderer-landscape/video-renderer-landscape.component';
 import { RestrictioningComponent } from './header/restrictioning/restrictioning.component';
 import { ChannelComponent } from './content/channel/channel.component';
+import { UploadVideoComponent } from './content/upload-video/upload-video.component';
+import { SubscriptionComponent } from './content/subscription/subscription.component';
 
 @NgModule({
   declarations: [
@@ -37,6 +39,8 @@ import { ChannelComponent } from './content/channel/channel.component';
     VideoRendererLandscapeComponent,
     RestrictioningComponent,
     ChannelComponent,
+    UploadVideoComponent,
+    SubscriptionComponent,
   ],
   imports: [
     BrowserModule,

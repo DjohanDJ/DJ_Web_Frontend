@@ -14,7 +14,11 @@
       ></div>
       <h6 *ngIf="!display">Trending</h6>
     </button>
-    <button class="home-navigation-button">
+    <button
+      [routerLink]="this.userSession.getCurrentUser() ? ['subscription'] : ''"
+      (click)="checkUserAlreadySignIn()"
+      class="home-navigation-button"
+    >
       <div
         class="subscription-image"
         [inlineSVG]="'./../../assets/navbar-assets/youtube-subscription.svg'"
@@ -68,5 +72,28 @@
       </button>
     </div>
     <h6 class="copyright-text" *ngIf="!display">&copy; 2020 DJ20-1</h6>
+  </div>
+</div>
+
+<!-- Buat Modal Subscription -->
+
+<div
+  class="{{
+    subscriptionModalState ? 'login-validation' : 'login-validation-none'
+  }}"
+>
+  <div class="validation-boxK">
+    <div class="title">
+      <h6>Sign In Required</h6>
+    </div>
+    <hr />
+    <div class="choiceK">
+      <h6>
+        You haven't sign in yet! Sign in first!
+      </h6>
+      <button (click)="changeModalState()" class="sign-in-element">
+        <h6>Ok</h6>
+      </button>
+    </div>
   </div>
 </div>
