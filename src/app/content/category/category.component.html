@@ -1,0 +1,69 @@
+<div class="main-container">
+  <div class="user-container">
+    <img class="image" src="{{ categoryService.currentLogo }}" alt="" />
+    <div class="user-identity">
+      <h6>
+        {{ categoryService.currentName }}
+      </h6>
+    </div>
+  </div>
+  <div class="tab-container">
+    <button
+      (click)="changeMusicState()"
+      [routerLink]="['/category']"
+      [queryParams]="{ category_query: 'music' }"
+      class="tab-item {{ categoryService.musicState ? 'tab-item-focus' : '' }}"
+    >
+      <h6>MUSIC</h6>
+    </button>
+    <button
+      (click)="changeSportState()"
+      [routerLink]="['/category']"
+      [queryParams]="{ category_query: 'sport' }"
+      class="tab-item {{ categoryService.sportState ? 'tab-item-focus' : '' }}"
+    >
+      <h6>SPORT</h6>
+    </button>
+    <button
+      (click)="changeGamingState()"
+      [routerLink]="['/category']"
+      [queryParams]="{ category_query: 'gaming' }"
+      class="tab-item {{ categoryService.gamingState ? 'tab-item-focus' : '' }}"
+    >
+      <h6>GAMING</h6>
+    </button>
+    <button
+      (click)="changeEntertainmentState()"
+      [routerLink]="['/category']"
+      [queryParams]="{ category_query: 'entertainment' }"
+      class="tab-item {{
+        categoryService.entertainmentState ? 'tab-item-focus' : ''
+      }}"
+    >
+      <h6>ENTERTAINMENT</h6>
+    </button>
+    <button
+      (click)="changeNewsState()"
+      [routerLink]="['/category']"
+      [queryParams]="{ category_query: 'news' }"
+      class="tab-item {{ categoryService.newsState ? 'tab-item-focus' : '' }}"
+    >
+      <h6>NEWS</h6>
+    </button>
+    <button
+      (click)="changeTravelState()"
+      [routerLink]="['/category']"
+      [queryParams]="{ category_query: 'travel' }"
+      class="tab-item {{ categoryService.travelState ? 'tab-item-focus' : '' }}"
+    >
+      <h6>TRAVEL</h6>
+    </button>
+  </div>
+  <div class="items-container">
+    <app-video-renderer-landscape
+      *ngFor="let i of filteredVideos"
+      [video]="i"
+      [videos]="filteredVideos"
+    ></app-video-renderer-landscape>
+  </div>
+</div>

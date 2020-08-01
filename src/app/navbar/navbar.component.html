@@ -15,7 +15,7 @@
       <h6 *ngIf="!display">Trending</h6>
     </button>
     <button
-      [routerLink]="this.userSession.getCurrentUser() ? ['subscription'] : ''"
+      [routerLink]="this.userSession.getCurrentUser() ? ['/subscription'] : ''"
       (click)="checkUserAlreadySignIn()"
       class="home-navigation-button"
     >
@@ -28,14 +28,21 @@
   </div>
   <hr *ngIf="!display" />
   <div class="category-section">
-    <button class="home-navigation-button">
+    <button
+      [routerLink]="['/category']"
+      [queryParams]="{ category_query: 'music' }"
+      class="home-navigation-button"
+    >
       <div
         class="home-image"
         [inlineSVG]="'./../../assets/navbar-assets/round-video-library.svg'"
       ></div>
       <h6 *ngIf="!display">Categories</h6>
     </button>
-    <button class="home-navigation-button">
+    <button
+      [routerLink]="['/premium-membership']"
+      class="home-navigation-button"
+    >
       <div
         class="fire-image"
         [inlineSVG]="

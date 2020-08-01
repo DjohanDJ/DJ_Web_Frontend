@@ -24,6 +24,8 @@ import { RestrictioningComponent } from './header/restrictioning/restrictioning.
 import { ChannelComponent } from './content/channel/channel.component';
 import { UploadVideoComponent } from './content/upload-video/upload-video.component';
 import { SubscriptionComponent } from './content/subscription/subscription.component';
+import { PremiumMembershipComponent } from './content/premium-membership/premium-membership.component';
+import { CategoryComponent } from './content/category/category.component';
 
 @NgModule({
   declarations: [
@@ -41,6 +43,8 @@ import { SubscriptionComponent } from './content/subscription/subscription.compo
     ChannelComponent,
     UploadVideoComponent,
     SubscriptionComponent,
+    PremiumMembershipComponent,
+    CategoryComponent,
   ],
   imports: [
     BrowserModule,

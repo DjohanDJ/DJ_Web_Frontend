@@ -35,3 +35,8 @@
   color: rgb(110, 110, 110);
   margin-top: 5px;
 }
+
+.click-bait-button:hover {
+  transition: background-color 500ms ease;
+  background-color: rgb(194, 194, 194);
+}

@@ -15,6 +15,7 @@ export const getVideoQuery = gql`
       video_path
       user_id
       restriction
+      category_id
     }
   }
 `;
@@ -43,8 +44,17 @@ export class HomeComponent implements OnInit {
         // console.log(result.data);
         this.videos = result.data.searchHomeVideosManager;
         this.videoService.setVideos(this.videos);
+        this.videos = this.shuffle(this.videos);
         // console.log(this.videos);
       });
+  }
+
+  shuffle(a: any) {
+    for (var i = a.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [a[i], a[j]] = [a[j], a[i]];
+    }
+    return a;
   }
 
   videos: any;

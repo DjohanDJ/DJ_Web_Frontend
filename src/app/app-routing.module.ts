@@ -8,6 +8,8 @@ import { RestrictioningComponent } from './header/restrictioning/restrictioning.
 import { ChannelComponent } from './content/channel/channel.component';
 import { UploadVideoComponent } from './content/upload-video/upload-video.component';
 import { SubscriptionComponent } from './content/subscription/subscription.component';
+import { PremiumMembershipComponent } from './content/premium-membership/premium-membership.component';
+import { CategoryComponent } from './content/category/category.component';
 
 const routes: Routes = [
   { path: '', component: HomeComponent },
@@ -18,6 +20,8 @@ const routes: Routes = [
   { path: 'channel/:id', component: ChannelComponent },
   { path: 'upload-video/:user_id', component: UploadVideoComponent },
   { path: 'subscription', component: SubscriptionComponent },
+  { path: 'premium-membership', component: PremiumMembershipComponent },
+  { path: 'category', component: CategoryComponent },
 ];
 
 @NgModule({
