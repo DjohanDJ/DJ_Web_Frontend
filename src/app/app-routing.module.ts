@@ -10,6 +10,7 @@ import { UploadVideoComponent } from './content/upload-video/upload-video.compon
 import { SubscriptionComponent } from './content/subscription/subscription.component';
 import { PremiumMembershipComponent } from './content/premium-membership/premium-membership.component';
 import { CategoryComponent } from './content/category/category.component';
+import { SendingComponent } from './content/watch/sending/sending.component';
 
 const routes: Routes = [
   { path: '', component: HomeComponent },
@@ -22,6 +23,7 @@ const routes: Routes = [
   { path: 'subscription', component: SubscriptionComponent },
   { path: 'premium-membership', component: PremiumMembershipComponent },
   { path: 'category', component: CategoryComponent },
+  { path: 'sending/:id', component: SendingComponent },
 ];
 
 @NgModule({

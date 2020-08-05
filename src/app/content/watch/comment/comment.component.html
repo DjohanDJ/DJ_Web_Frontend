@@ -1,0 +1,23 @@
+<div class="comment-container">
+  <div class="user-container">
+    <div class="user-items">
+      <button [routerLink]="['/channel/' + (comment ? comment.user_id : '')]">
+        <img
+          class="user-image"
+          src="{{
+            userFromPickedComment ? userFromPickedComment.user_image : ''
+          }}"
+          alt=""
+        />
+      </button>
+      <div class="user-identity">
+        <h6>
+          {{ userFromPickedComment ? userFromPickedComment.username : "" }}
+        </h6>
+        <h6 class="subscriber">
+          {{ comment.comment_value }}
+        </h6>
+      </div>
+    </div>
+  </div>
+</div>

@@ -120,6 +120,7 @@ export class HeaderComponent implements OnInit {
   changeSignInBoxState() {
     this.signInBoxDisplay = !this.signInBoxDisplay;
     this.dropdownDisplay = false;
+    window.scrollTo(0, 0);
   }
 
   switchAccount() {
@@ -148,6 +149,7 @@ export class HeaderComponent implements OnInit {
   loginBoxDisplay: boolean = false;
   changeStateLoginBox() {
     this.loginBoxDisplay = !this.loginBoxDisplay;
+    window.scrollTo(0, 0);
   }
 
   searchForUserState: boolean = false;
@@ -206,11 +208,13 @@ export class HeaderComponent implements OnInit {
   noRestriction() {
     this.restrictionToggle = false;
     this.videoService.changeRestriction(false);
+    window.scrollTo(0, 0);
   }
 
   restrictionOnlyKids() {
     this.restrictionToggle = false;
     this.videoService.changeRestriction(true);
+    window.scrollTo(0, 0);
   }
 
   //keybard shortcut list
@@ -219,5 +223,6 @@ export class HeaderComponent implements OnInit {
     this.shortcutListState = !this.shortcutListState;
     this.settingsDropdownState = false;
     this.dropdownDisplay = false;
+    window.scrollTo(0, 0);
   }
 }

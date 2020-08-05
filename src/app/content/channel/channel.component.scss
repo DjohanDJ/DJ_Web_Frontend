@@ -89,3 +89,45 @@
   transition: background-color 500ms ease;
   background-color: rgb(194, 194, 194);
 }
+
+// home page section
+
+.home {
+  display: flex;
+  flex-direction: column;
+}
+
+.first-section {
+  display: flex;
+  flex-direction: column;
+}
+
+.sub-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.title {
+  font-weight: 500;
+  font-size: larger;
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
+
+.see-all-videos-button {
+  margin-top: 20px;
+  margin-bottom: 20px;
+  padding: 10px;
+  background-color: rgb(0, 116, 194);
+  border-radius: 2px;
+}
+
+.see-all-videos-button h6 {
+  color: white;
+}
+
+.first-content {
+  display: flex;
+  flex-wrap: wrap;
+}

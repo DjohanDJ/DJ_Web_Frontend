@@ -13,19 +13,13 @@
       <img
         class="user-image"
         src="{{
-          userSession.getCurrentUser()
-            ? userSession.getCurrentUser().photoUrl
-            : ''
+          userFromPickedChannel ? userFromPickedChannel.user_image : ''
         }}"
         alt=""
       />
       <div class="user-identity">
         <h6>
-          {{
-            userSession.getCurrentUser()
-              ? userSession.getCurrentUser().name
-              : ""
-          }}
+          {{ userFromPickedChannel ? userFromPickedChannel.username : "" }}
         </h6>
         <h6 class="subscriber">
           4.2M Subscribers
@@ -70,10 +64,55 @@
   </div>
   <div class="items-container">
     <div *ngIf="homeState" class="home">
-      this is home
+      <div class="first-section">
+        <div class="sub-header">
+          <h6 class="title">Recently Uploaded Videos</h6>
+          <button (click)="changeVideosState()" class="see-all-videos-button">
+            <h6>See All Videos</h6>
+          </button>
+        </div>
+        <div class="first-content">asd</div>
+      </div>
+      <hr />
+      <div class="second-section">
+        <div class="sub-header">
+          <h6 class="title">5 Random Videos</h6>
+          <button (click)="changeVideosState()" class="see-all-videos-button">
+            <h6>See All Videos</h6>
+          </button>
+        </div>
+        <div class="first-content">
+          <app-video-renderer
+            *ngFor="let i of filteredVideos"
+            [video]="i"
+            [videos]="filteredVideos"
+          ></app-video-renderer>
+        </div>
+      </div>
+      <hr />
+      <div class="third-section">
+        <div class="sub-header">
+          <h6 class="title">3 Random Playlist</h6>
+          <button (click)="changePlaylistState()" class="see-all-videos-button">
+            <h6>See All Playlist</h6>
+          </button>
+        </div>
+        <div class="first-content"></div>
+      </div>
     </div>
     <div *ngIf="videosState" class="videos">
-      this is videos
+      <div class="second-section">
+        <div class="sub-header">
+          <h6 class="title">Channel Videos</h6>
+        </div>
+        <div class="first-content">
+          <app-video-renderer
+            *ngFor="let i of filteredCurrentVideos"
+            [video]="i"
+            [videos]="filteredCurrentVideos"
+          ></app-video-renderer>
+        </div>
+      </div>
     </div>
     <div *ngIf="playlistState" class="playlist">
       this is playlist

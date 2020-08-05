@@ -44,7 +44,8 @@ export class HomeComponent implements OnInit {
         // console.log(result.data);
         this.videos = result.data.searchHomeVideosManager;
         this.videoService.setVideos(this.videos);
-        this.videos = this.shuffle(this.videos);
+        this.pushAllVideosToNew();
+        this.shuffledVideos = this.shuffle(this.shuffledVideos);
         // console.log(this.videos);
       });
   }
@@ -57,5 +58,12 @@ export class HomeComponent implements OnInit {
     return a;
   }
 
+  pushAllVideosToNew() {
+    for (var i = 0; i < this.videos.length; i++) {
+      this.shuffledVideos.push(this.videos[i]);
+    }
+  }
+
+  shuffledVideos: any = [];
   videos: any;
 }

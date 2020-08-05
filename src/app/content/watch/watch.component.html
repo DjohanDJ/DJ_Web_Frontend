@@ -14,7 +14,94 @@
         </h6>
       </div>
     </div>
-    <div class="video-comment">Comment Section</div>
+    <hr />
+    <div class="user-container">
+      <div class="user-items">
+        <button
+          [routerLink]="[
+            '/channel/' + (userFromPickedVideo ? userFromPickedVideo.id : '')
+          ]"
+        >
+          <img
+            class="user-image"
+            src="{{
+              userFromPickedVideo ? userFromPickedVideo.user_image : ''
+            }}"
+            alt=""
+          />
+        </button>
+        <div class="user-identity">
+          <h6>
+            {{ userFromPickedVideo ? userFromPickedVideo.username : "" }}
+          </h6>
+          <h6 class="subscriber">
+            4.2M Subscribers
+          </h6>
+        </div>
+      </div>
+      <button class="subscribe-button">
+        <h6>SUBSCRIBE</h6>
+      </button>
+    </div>
+    <div class="video-description">
+      <h6>Detail Description</h6>
+      <br />
+      <h6>
+        {{ selectedVideo.description }}
+      </h6>
+    </div>
+    <hr />
+    <div class="video-comment">
+      <img
+        *ngIf="userSession.getCurrentUser()"
+        class="user-image"
+        src="{{ userSession.getCurrentUser().photoUrl }}"
+        alt=""
+      />
+      <div *ngIf="userSession.getCurrentUser()" class="order-form">
+        <input
+          id="fullname"
+          type="text"
+          autocomplete="off"
+          required
+          #box
+          (keyup)="onTypeSearchBox(box.value)"
+        />
+        <label for="name" class="label-name">
+          <span class="name-content">Add a public comment...</span>
+        </label>
+      </div>
+      <button
+        (click)="onClickSubmitComment()"
+        [routerLink]="['/sending/' + videoId]"
+        *ngIf="userSession.getCurrentUser() && booleanSearch"
+        class="send-button"
+      >
+        <div
+          class="send-button-image"
+          [inlineSVG]="'../../../assets/video-detail-assets/send.svg'"
+        ></div>
+      </button>
+      <div *ngIf="!userSession.getCurrentUser()" class="warning-text">
+        <h6>
+          Sign in first for comment...
+        </h6>
+      </div>
+    </div>
+    <hr />
+    <div class="public-comments">
+      <h6 *ngIf="commentState">
+        Public Comments
+      </h6>
+      <h6 *ngIf="!commentState">
+        There's no comment yet.
+      </h6>
+      <app-comment
+        *ngFor="let i of currentComments"
+        [comment]="i"
+        [currentComments]="currentComments"
+      ></app-comment>
+    </div>
   </div>
   <div class="separator"></div>
   <div class="related-video">

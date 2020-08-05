@@ -26,6 +26,8 @@ import { UploadVideoComponent } from './content/upload-video/upload-video.compon
 import { SubscriptionComponent } from './content/subscription/subscription.component';
 import { PremiumMembershipComponent } from './content/premium-membership/premium-membership.component';
 import { CategoryComponent } from './content/category/category.component';
+import { CommentComponent } from './content/watch/comment/comment.component';
+import { SendingComponent } from './content/watch/sending/sending.component';
 
 @NgModule({
   declarations: [
@@ -45,6 +47,8 @@ import { CategoryComponent } from './content/category/category.component';
     SubscriptionComponent,
     PremiumMembershipComponent,
     CategoryComponent,
+    CommentComponent,
+    SendingComponent,
   ],
   imports: [
     BrowserModule,

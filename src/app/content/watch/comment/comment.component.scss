@@ -1,0 +1,35 @@
+.user-container {
+  width: 100%;
+  height: 9vh;
+  display: flex;
+  align-items: center;
+  padding-left: 10px;
+  padding-right: 10px;
+  justify-content: space-between;
+}
+
+.user-items {
+  display: flex;
+  align-items: center;
+}
+
+.user-image {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+}
+
+.user-identity {
+  display: flex;
+  flex-direction: column;
+  margin-left: 15px;
+}
+
+.user-identity h6 {
+  font-size: small;
+}
+
+.user-identity .subscriber {
+  margin-top: 5px;
+  font-size: small;
+}
