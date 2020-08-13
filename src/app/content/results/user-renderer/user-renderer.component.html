@@ -1,0 +1,26 @@
+<div class="user-container">
+  <button [routerLink]="['/channel/' + user.id]" class="user-items">
+    <img class="user-image" src="{{ user ? user.user_image : '' }}" alt="" />
+    <div class="user-identity">
+      <h6>
+        {{ user ? user.username : "" }}
+      </h6>
+      <h6 class="subscriber">4.2M Subscribers • {{ videoCount }} videos</h6>
+      <h6 class="subscriber">
+        {{ user.channel_desc }}
+      </h6>
+    </div>
+  </button>
+  <div class="subscibe-panel">
+    <button
+      (click)="changeSubscribeState()"
+      class="subscribe-button {{ subscribeState ? 'subscribed-button' : '' }}"
+    >
+      <h6 *ngIf="!subscribeState">SUBSCRIBE</h6>
+      <h6 *ngIf="subscribeState">SUBSCRIBED</h6>
+    </button>
+    <button class="bell-button" *ngIf="subscribeState">
+      <img src="../../../assets/header-assets/bxs-bell.svg" alt="" />
+    </button>
+  </div>
+</div>

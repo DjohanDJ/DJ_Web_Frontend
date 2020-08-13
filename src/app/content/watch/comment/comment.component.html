@@ -20,4 +20,60 @@
       </div>
     </div>
   </div>
+  <div class="action">
+    <button class="action-button">
+      <img
+        class="action-image"
+        src="../../../../assets/comments-assets/like-outlined.svg"
+        alt=""
+      />
+    </button>
+    <button class="action-button">
+      <img
+        class="action-image"
+        src="../../../../assets/comments-assets/dislike-outlined.svg"
+        alt=""
+      />
+    </button>
+    <button (click)="changeReplyState()" class="action-button">
+      <h6>REPLY</h6>
+    </button>
+  </div>
+  <div *ngIf="actionReplyState" class="video-comment">
+    <img
+      *ngIf="userSession.getCurrentUser()"
+      class="user-image"
+      src="{{ userSession.getCurrentUser().photoUrl }}"
+      alt=""
+    />
+    <div *ngIf="userSession.getCurrentUser()" class="order-form">
+      <input
+        id="fullname"
+        type="text"
+        autocomplete="off"
+        required
+        #box
+        (keyup)="onTypeSearchBox(box.value)"
+      />
+      <label for="name" class="label-name">
+        <span class="name-content">Add a public comment...</span>
+      </label>
+    </div>
+    <button
+      (click)="onClickSubmitComment()"
+      [routerLink]="['/sending/' + videoId]"
+      *ngIf="userSession.getCurrentUser() && booleanSearch"
+      class="send-button"
+    >
+      <div
+        class="send-button-image"
+        [inlineSVG]="'../../../assets/video-detail-assets/send.svg'"
+      ></div>
+    </button>
+    <div *ngIf="!userSession.getCurrentUser()" class="warning-text">
+      <h6>
+        Sign in first for comment...
+      </h6>
+    </div>
+  </div>
 </div>

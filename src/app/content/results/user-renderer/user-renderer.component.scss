@@ -1,0 +1,59 @@
+.user-container {
+  width: 100%;
+  height: 17vh;
+  display: flex;
+  align-items: center;
+  padding-left: 100px;
+  padding-right: 120px;
+  justify-content: space-between;
+}
+
+.user-items {
+  display: flex;
+  align-items: center;
+}
+
+.user-identity {
+  display: flex;
+  flex-direction: column;
+  margin-left: 15px;
+  justify-content: left;
+}
+
+.user-identity h6 {
+  font-size: larger;
+  text-align: left;
+}
+
+.user-identity .subscriber {
+  color: grey;
+  font-size: small;
+}
+
+.user-image {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+}
+
+.subscribe-button {
+  background-color: rgb(230, 0, 0);
+  padding: 10px;
+  border-radius: 2px;
+  &.subscribed-button {
+    background-color: rgb(90, 88, 88);
+  }
+}
+
+.subscribe-button h6 {
+  color: white;
+}
+
+.subscibe-panel {
+  display: flex;
+  align-items: center;
+}
+
+.bell-button {
+  padding: 10px;
+}

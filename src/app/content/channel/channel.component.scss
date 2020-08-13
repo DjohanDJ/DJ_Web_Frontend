@@ -47,6 +47,9 @@
   background-color: rgb(230, 0, 0);
   padding: 10px;
   border-radius: 2px;
+  &.subscribed-button {
+    background-color: rgb(90, 88, 88);
+  }
 }
 
 .subscribe-button h6 {
@@ -130,4 +133,13 @@
 .first-content {
   display: flex;
   flex-wrap: wrap;
+}
+
+.subscibe-panel {
+  display: flex;
+  align-items: center;
+}
+
+.bell-button {
+  padding: 10px;
 }

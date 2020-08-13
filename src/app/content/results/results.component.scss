@@ -8,3 +8,32 @@
   display: flex;
   flex-direction: column;
 }
+
+.filtering-container {
+  display: flex;
+  flex: 1;
+  height: 5vh;
+  width: 100%;
+  justify-content: center;
+}
+
+.tab-item {
+  width: 15%;
+  padding: 10px;
+  &.tab-item-focus {
+    border-bottom: 2px solid rgb(44, 44, 44);
+    h6 {
+      color: black;
+      font-weight: 500;
+    }
+  }
+}
+
+.tab-item h6 {
+  color: rgb(87, 87, 87);
+}
+
+.tab-item:hover {
+  transition: background-color 500ms ease;
+  background-color: rgb(194, 194, 194);
+}

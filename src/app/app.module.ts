@@ -28,6 +28,7 @@ import { PremiumMembershipComponent } from './content/premium-membership/premium
 import { CategoryComponent } from './content/category/category.component';
 import { CommentComponent } from './content/watch/comment/comment.component';
 import { SendingComponent } from './content/watch/sending/sending.component';
+import { UserRendererComponent } from './content/results/user-renderer/user-renderer.component';
 
 @NgModule({
   declarations: [
@@ -49,6 +50,7 @@ import { SendingComponent } from './content/watch/sending/sending.component';
     CategoryComponent,
     CommentComponent,
     SendingComponent,
+    UserRendererComponent,
   ],
   imports: [
     BrowserModule,

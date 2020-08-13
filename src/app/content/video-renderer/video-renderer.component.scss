@@ -5,6 +5,11 @@
   margin: 10px;
 }
 
+.click-bait-button {
+  transform: scale(1);
+  transition: transform 400ms ease-in;
+}
+
 .video-section,
 .video-image {
   width: 100%;
@@ -37,6 +42,6 @@
 }
 
 .click-bait-button:hover {
-  transition: background-color 500ms ease;
-  background-color: rgb(194, 194, 194);
+  transform: scale(1.025);
+  transition: transform 200ms ease-in;
 }

@@ -1,9 +1,61 @@
 <div class="home-section">
-  <div class="video-content">
+  <div class="filtering-container">
+    <button
+      (click)="changeAllState()"
+      class="tab-item {{ allState ? 'tab-item-focus' : '' }}"
+    >
+      <h6>All</h6>
+    </button>
+    <button
+      (click)="changeThisWeekState()"
+      class="tab-item {{ thisWeekState ? 'tab-item-focus' : '' }}"
+    >
+      <h6>This Week</h6>
+    </button>
+    <button
+      (click)="changeThisMonthState()"
+      class="tab-item {{ thisMonthState ? 'tab-item-focus' : '' }}"
+    >
+      <h6>This Month</h6>
+    </button>
+    <button
+      (click)="changeThisYearState()"
+      class="tab-item {{ thisYearState ? 'tab-item-focus' : '' }}"
+    >
+      <h6>This Year</h6>
+    </button>
+    <button
+      (click)="changeVideoState()"
+      class="tab-item {{ videoState ? 'tab-item-focus' : '' }}"
+    >
+      <h6>Video</h6>
+    </button>
+    <button
+      (click)="changePlaylistState()"
+      class="tab-item {{ playlistState ? 'tab-item-focus' : '' }}"
+    >
+      <h6>Playlist</h6>
+    </button>
+    <button
+      (click)="changeChannelState()"
+      class="tab-item {{ channelState ? 'tab-item-focus' : '' }}"
+    >
+      <h6>Channel</h6>
+    </button>
+  </div>
+  <div *ngIf="!channelState" class="video-content">
     <app-video-renderer-landscape
-      *ngFor="let i of videos"
+      *ngFor="let i of filteredVideos"
       [video]="i"
-      [videos]="videos"
+      [videos]="filteredVideos"
     ></app-video-renderer-landscape>
+  </div>
+  <div *ngIf="channelState" class="video-content">
+    <app-user-renderer
+      *ngFor="let i of filteredUsers"
+      [user]="i"
+      [users]="filteredUsers"
+    >
+    </app-user-renderer>
   </div>
 </div>

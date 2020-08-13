@@ -1,1 +1,9 @@
-<p>trending works!</p>
+<div class="main-container">
+  <div class="video-content">
+    <app-video-renderer-landscape
+      *ngFor="let i of videosByLocation"
+      [video]="i"
+      [videos]="videosByLocation"
+    ></app-video-renderer-landscape>
+  </div>
+</div>

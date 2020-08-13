@@ -20,9 +20,9 @@
 
 .video-detail-description,
 .video-comment {
-  padding: 10px;
   display: flex;
   flex-direction: column;
+  padding-left: 10px;
 }
 
 // Font dkk
@@ -114,6 +114,20 @@ hr {
   align-items: center;
   padding-top: 15px;
   padding-bottom: 15px;
+  &.column {
+    flex-direction: column;
+  }
+}
+
+.user-comment {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  padding-top: 15px;
+  padding-bottom: 15px;
+  &.expand {
+    width: 100%;
+  }
 }
 
 .order-form {
@@ -200,4 +214,71 @@ input {
   width: 100%;
   margin-top: 10px;
   margin-bottom: 10px;
+}
+
+.comments {
+  display: flex;
+  flex-direction: column;
+}
+
+.child-comment {
+  left: 50px;
+  width: calc(100% - 50px);
+}
+
+.replies {
+  margin: 0;
+  width: 100%;
+  padding-left: 60px;
+  text-align: left;
+  color: #005994;
+}
+
+.tab-container {
+  display: flex;
+  flex: 1;
+  height: 5vh;
+  width: 100%;
+  justify-content: center;
+}
+
+.tab-item {
+  width: 30%;
+  padding: 10px;
+  &.tab-item-focus {
+    border-bottom: 2px solid rgb(44, 44, 44);
+    h6 {
+      color: black;
+      font-weight: 500;
+    }
+  }
+}
+
+.tab-item h6 {
+  color: rgb(87, 87, 87);
+}
+
+.tab-item:hover {
+  transition: background-color 500ms ease;
+  background-color: rgb(194, 194, 194);
+}
+
+.title h6 {
+  transform: scale(1);
+  animation: rotateButton 1500ms forwards;
+}
+
+@keyframes rotateButton {
+  0% {
+    transform: scale(1);
+    left: 0px;
+  }
+  50% {
+    transform: scale(1.05);
+    left: 50px;
+  }
+  100% {
+    transform: scale(1);
+    left: 0px;
+  }
 }

@@ -1,10 +1,13 @@
 <div class="home-section">
   <h4 class="main-static-text">Recommended</h4>
   <div class="video-content">
-    <app-video-renderer
-      *ngFor="let i of shuffledVideos"
-      [video]="i"
-      [videos]="videos"
-    ></app-video-renderer>
+    <div *ngFor="let i of videosByLocation; let j = index">
+      <app-video-renderer
+        *ngIf="j < lastKey"
+        [video]="i"
+        [videos]="videos"
+      ></app-video-renderer>
+    </div>
   </div>
+  <div class="end-point"></div>
 </div>

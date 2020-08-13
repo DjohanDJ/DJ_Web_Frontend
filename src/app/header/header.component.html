@@ -161,7 +161,11 @@
       >
         <h6>Restrict Mode</h6>
       </button>
-      <button class="element-dropdown-menu">
+      <button
+        [routerLink]="['/restrictioning']"
+        (click)="changeLocationModalState()"
+        class="element-dropdown-menu"
+      >
         <h6>Location</h6>
       </button>
       <button (click)="changeShortcutState()" class="element-dropdown-menu">
@@ -258,6 +262,57 @@
       <h6> ↓ - low the video volume</h6>
       <button (click)="changeShortcutState()" class="sign-in-element">
         <h6>I get it!</h6>
+      </button>
+    </div>
+  </div>
+</div>
+
+<div
+  class="{{
+    locationModalState ? 'login-validation' : 'login-validation-none'
+  }}"
+>
+  <div class="validation-box">
+    <div class="title">
+      <h6>Choose Location</h6>
+    </div>
+    <hr />
+    <div class="choice-location">
+      <button
+        [routerLink]="['']"
+        (click)="changeLocationInd()"
+        class="sign-in-element"
+      >
+        <h6>Indonesia</h6>
+      </button>
+      <hr />
+      <button
+        [routerLink]="['']"
+        (click)="changeLocationHK()"
+        class="sign-in-element"
+      >
+        <h6>Hongkong</h6>
+      </button>
+      <button
+        [routerLink]="['']"
+        (click)="changeLocationAus()"
+        class="sign-in-element"
+      >
+        <h6>Australia</h6>
+      </button>
+      <button
+        [routerLink]="['']"
+        (click)="changeLocationChi()"
+        class="sign-in-element"
+      >
+        <h6>China</h6>
+      </button>
+      <button
+        [routerLink]="['']"
+        (click)="changeLocationAmr()"
+        class="sign-in-element"
+      >
+        <h6>America</h6>
       </button>
     </div>
   </div>

@@ -51,41 +51,63 @@
       </h6>
     </div>
     <hr />
-    <div class="video-comment">
-      <img
-        *ngIf="userSession.getCurrentUser()"
-        class="user-image"
-        src="{{ userSession.getCurrentUser().photoUrl }}"
-        alt=""
-      />
-      <div *ngIf="userSession.getCurrentUser()" class="order-form">
-        <input
-          id="fullname"
-          type="text"
-          autocomplete="off"
-          required
-          #box
-          (keyup)="onTypeSearchBox(box.value)"
-        />
-        <label for="name" class="label-name">
-          <span class="name-content">Add a public comment...</span>
-        </label>
+    <div
+      class="video-comment {{ userSession.getCurrentUser() ? 'column' : '' }}"
+    >
+      <div class="tab-container">
+        <button
+          [routerLink]="['/sending/' + videoId]"
+          (click)="changeHomeState()"
+          class="tab-item {{
+            commentService.getSortNewState() ? 'tab-item-focus' : ''
+          }}"
+        >
+          <h6>Newest Comments</h6>
+        </button>
+        <button
+          [routerLink]="['/sending/' + videoId]"
+          (click)="changeVideosState()"
+          class="tab-item {{
+            commentService.getSortLikeState() ? 'tab-item-focus' : ''
+          }}"
+        >
+          <h6>Top Liked Comments</h6>
+        </button>
       </div>
-      <button
-        (click)="onClickSubmitComment()"
-        [routerLink]="['/sending/' + videoId]"
-        *ngIf="userSession.getCurrentUser() && booleanSearch"
-        class="send-button"
+      <div
+        *ngIf="userSession.getCurrentUser() ? true : false"
+        class="user-comment {{ userSession.getCurrentUser() ? 'expand' : '' }}"
       >
-        <div
-          class="send-button-image"
-          [inlineSVG]="'../../../assets/video-detail-assets/send.svg'"
-        ></div>
-      </button>
-      <div *ngIf="!userSession.getCurrentUser()" class="warning-text">
-        <h6>
-          Sign in first for comment...
-        </h6>
+        <img
+          *ngIf="userSession.getCurrentUser()"
+          class="user-image"
+          src="{{ userSession.getCurrentUser().photoUrl }}"
+          alt=""
+        />
+        <div *ngIf="userSession.getCurrentUser()" class="order-form">
+          <input
+            id="fullname"
+            type="text"
+            autocomplete="off"
+            required
+            #box
+            (keyup)="onTypeSearchBox(box.value)"
+          />
+          <label for="name" class="label-name">
+            <span class="name-content">Add a public comment...</span>
+          </label>
+        </div>
+        <button
+          (click)="onClickSubmitComment()"
+          [routerLink]="['/sending/' + videoId]"
+          *ngIf="userSession.getCurrentUser() && booleanSearch"
+          class="send-button"
+        >
+          <div
+            class="send-button-image"
+            [inlineSVG]="'../../../assets/video-detail-assets/send.svg'"
+          ></div>
+        </button>
       </div>
     </div>
     <hr />
@@ -96,11 +118,39 @@
       <h6 *ngIf="!commentState">
         There's no comment yet.
       </h6>
-      <app-comment
-        *ngFor="let i of currentComments"
-        [comment]="i"
-        [currentComments]="currentComments"
-      ></app-comment>
+      <h6 *ngIf="commentState">{{ commentCount }} Comments</h6>
+      <div class="parent">
+        <div class="comments" *ngFor="let i of currentComments; let k = index">
+          <app-comment
+            *ngIf="k < lastKey"
+            [comment]="i"
+            [currentComments]="currentComments"
+          ></app-comment>
+          <button (click)="changeChildCommentState(i)">
+            <h5
+              *ngIf="!childCommentState[i.id] && childCommentCountState[i.id]"
+              class="replies"
+            >
+              View {{ childCommentCount[i.id] }} reply
+            </h5>
+            <h5
+              *ngIf="childCommentState[i.id] && childCommentCountState[i.id]"
+              class="replies"
+            >
+              Hide {{ childCommentCount[i.id] }} reply
+            </h5>
+          </button>
+          <div class="comments" *ngFor="let j of allComments">
+            <app-comment
+              class="child-comment"
+              *ngIf="i.id == j.comment_parent_id && childCommentState[i.id]"
+              [parentComment]="i"
+              [comment]="j"
+            ></app-comment>
+          </div>
+        </div>
+      </div>
+      <div class="end-point"></div>
     </div>
   </div>
   <div class="separator"></div>

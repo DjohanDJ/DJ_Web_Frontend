@@ -3,6 +3,8 @@
   width: calc(100vw - 300px);
   height: auto;
   margin: 10px;
+  transition: transform 400ms ease-in;
+  transform: scale(1);
 }
 
 .click-bait-button {
@@ -57,4 +59,9 @@
 .line-description {
   text-align: left;
   margin-top: 10px;
+}
+
+.video-renderer-container:hover {
+  transform: scale(1.008);
+  transition: transform 200ms ease-in;
 }

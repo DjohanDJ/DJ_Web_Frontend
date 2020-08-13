@@ -14,6 +14,20 @@ export const searchVideosQuery = gql`
       view_count
       upload_date
       video_path
+      user_id
+    }
+  }
+`;
+
+export const getUsers = gql`
+  query getUsers {
+    users {
+      id
+      username
+      channel_name
+      user_image
+      channel_banner
+      channel_desc
     }
   }
 `;
@@ -59,9 +73,133 @@ export class ResultsComponent implements OnInit {
       })
       .valueChanges.subscribe((result) => {
         this.videos = result.data.searchVideos;
+        this.filteredVideos = this.videos;
+      });
+
+    this.apollo
+      .watchQuery<any>({
+        query: getUsers,
+      })
+      .valueChanges.subscribe((result) => {
+        this.users = result.data.users;
       });
   }
   searchQuery: string;
   // searchQuery: string = this.videoService.getSearchQuery();
   videos: any;
+
+  filteredVideos: any;
+
+  allState: boolean = true;
+  thisWeekState: boolean = false;
+  thisMonthState: boolean = false;
+  thisYearState: boolean = false;
+  videoState: boolean = false;
+  playlistState: boolean = false;
+  channelState: boolean = false;
+
+  changeAllState() {
+    this.allState = true;
+    this.thisWeekState = false;
+    this.thisMonthState = false;
+    this.thisYearState = false;
+    this.videoState = false;
+    this.playlistState = false;
+    this.channelState = false;
+    this.filteredVideos = [];
+    this.filteredVideos = this.videos;
+  }
+
+  changeThisWeekState() {
+    this.allState = false;
+    this.thisWeekState = true;
+    this.thisMonthState = false;
+    this.thisYearState = false;
+    this.videoState = false;
+    this.playlistState = false;
+    this.channelState = false;
+    this.filterByDay(7);
+  }
+
+  changeThisMonthState() {
+    this.allState = false;
+    this.thisWeekState = false;
+    this.thisMonthState = true;
+    this.thisYearState = false;
+    this.videoState = false;
+    this.playlistState = false;
+    this.channelState = false;
+    this.filterByDay(30);
+  }
+
+  changeThisYearState() {
+    this.allState = false;
+    this.thisWeekState = false;
+    this.thisMonthState = false;
+    this.thisYearState = true;
+    this.videoState = false;
+    this.playlistState = false;
+    this.channelState = false;
+    this.filterByDay(365);
+  }
+
+  changeVideoState() {
+    this.allState = false;
+    this.thisWeekState = false;
+    this.thisMonthState = false;
+    this.thisYearState = false;
+    this.videoState = true;
+    this.playlistState = false;
+    this.channelState = false;
+  }
+
+  changePlaylistState() {
+    this.allState = false;
+    this.thisWeekState = false;
+    this.thisMonthState = false;
+    this.thisYearState = false;
+    this.videoState = false;
+    this.playlistState = true;
+    this.channelState = false;
+  }
+
+  changeChannelState() {
+    this.allState = false;
+    this.thisWeekState = false;
+    this.thisMonthState = false;
+    this.thisYearState = false;
+    this.videoState = false;
+    this.playlistState = false;
+    this.channelState = true;
+    this.checkContainUser();
+  }
+
+  filterByDay(dayCount: number) {
+    this.filteredVideos = [];
+    var date = new Date();
+    for (let i = 0; i < this.videos.length; i++) {
+      const element = this.videos[i];
+      var dbDate = new Date(element.upload_date);
+      var differentDate = Math.abs(
+        Math.floor((dbDate.getTime() - date.getTime()) / (1000 * 3600 * 24))
+      );
+      if (differentDate <= dayCount) {
+        this.filteredVideos.push(element);
+      }
+    }
+  }
+
+  checkContainUser() {
+    for (let i = 0; i < this.users.length; i++) {
+      const element = this.users[i];
+      if (
+        element.username.toLowerCase().includes(this.searchQuery.toLowerCase())
+      ) {
+        this.filteredUsers.push(element);
+      }
+    }
+  }
+
+  filteredUsers: any = [];
+  users: any;
 }

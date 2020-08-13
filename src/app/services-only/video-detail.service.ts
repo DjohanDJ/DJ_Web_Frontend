@@ -8,6 +8,8 @@ export class VideoDetailService {
 
   isRestriction: boolean = false;
 
+  currentChildComments = [];
+
   videos: any = null;
   restrictedVideos: any = null;
 
@@ -29,5 +31,13 @@ export class VideoDetailService {
 
   getRestrictionState(): boolean {
     return this.isRestriction;
+  }
+
+  setChildComment(currentComments) {
+    this.currentChildComments = currentComments;
+  }
+
+  getCurrentChildComments() {
+    return this.currentChildComments;
   }
 }

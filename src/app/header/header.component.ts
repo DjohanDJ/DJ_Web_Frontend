@@ -5,6 +5,7 @@ import { UserSessionService } from '../services-only/user-session.service';
 import { Apollo } from 'apollo-angular';
 import gql from 'graphql-tag';
 import { VideoDetailService } from '../services-only/video-detail.service';
+import { LocationDetailService } from '../services-only/location-detail.service';
 
 export const searchUserByEmail = gql`
   query searchUser($searchEmail: String!) {
@@ -56,7 +57,8 @@ export class HeaderComponent implements OnInit {
     private authService: SocialAuthService,
     public userSession: UserSessionService,
     private apollo: Apollo,
-    private videoService: VideoDetailService
+    private videoService: VideoDetailService,
+    private locationService: LocationDetailService
   ) {}
 
   @Input() display: boolean;
@@ -224,5 +226,42 @@ export class HeaderComponent implements OnInit {
     this.settingsDropdownState = false;
     this.dropdownDisplay = false;
     window.scrollTo(0, 0);
+  }
+
+  locationModalState: boolean = false;
+
+  changeLocationModalState() {
+    this.locationModalState = !this.locationModalState;
+    this.settingsDropdownState = false;
+  }
+
+  changeLocationInd() {
+    this.locationService.setCurrentLocation('Indonesia');
+    this.locationModalState = false;
+    this.settingsDropdownState = false;
+  }
+
+  changeLocationHK() {
+    this.locationService.setCurrentLocation('Hong Kong');
+    this.locationModalState = false;
+    this.settingsDropdownState = false;
+  }
+
+  changeLocationAus() {
+    this.locationService.setCurrentLocation('Australia');
+    this.locationModalState = false;
+    this.settingsDropdownState = false;
+  }
+
+  changeLocationChi() {
+    this.locationService.setCurrentLocation('China');
+    this.locationModalState = false;
+    this.settingsDropdownState = false;
+  }
+
+  changeLocationAmr() {
+    this.locationService.setCurrentLocation('America');
+    this.locationModalState = false;
+    this.settingsDropdownState = false;
   }
 }

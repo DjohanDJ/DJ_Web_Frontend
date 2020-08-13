@@ -14,6 +14,7 @@ export const searchUserById = gql`
       user_password
       channel_name
       user_image
+      channel_banner
     }
   }
 `;
@@ -35,6 +36,7 @@ export class ChannelComponent implements OnInit {
     this.currentUserParam = this.route.snapshot.params.id;
     this.filterTop5Videos();
     this.filterGetVideos();
+    this.filterRecentVideos();
     this.apollo
       .watchQuery<any>({
         query: searchUserById,
@@ -138,6 +140,34 @@ export class ChannelComponent implements OnInit {
       const element = this.videos[i];
       if (this.currentUserParam == element.user_id) {
         this.filteredCurrentVideos.push(element);
+      }
+    }
+  }
+
+  subscribeState: boolean = false;
+
+  changeSubscribeState() {
+    this.subscribeState = !this.subscribeState;
+  }
+
+  recentVideos: any = [];
+
+  filterRecentVideos() {
+    var currentDate = new Date();
+    for (let i = 0; i < this.videos.length; i++) {
+      const element = this.videos[i];
+      var dbDate = new Date(element.upload_date);
+      var differentDate = Math.abs(
+        Math.floor(
+          (dbDate.getTime() - currentDate.getTime()) / (1000 * 3600 * 24)
+        )
+      );
+      if (differentDate <= 7) {
+        this.recentVideos.push(element);
+        i++;
+      }
+      if (i == 5) {
+        break;
       }
     }
   }

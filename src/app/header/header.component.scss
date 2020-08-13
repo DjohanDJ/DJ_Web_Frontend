@@ -361,3 +361,11 @@ h6 {
   border-right: none;
   border-bottom: none;
 }
+
+// location modal
+
+.choice-location {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
