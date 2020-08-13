@@ -114,16 +114,42 @@
       </div>
     </div>
     <div *ngIf="videosState" class="videos">
+      <div class="filtering-container">
+        <button
+          (click)="changeMostPopularState()"
+          class="tab-item {{ mostPopularState ? 'tab-item-focus' : '' }}"
+        >
+          <h6>Most Popular</h6>
+        </button>
+        <button
+          (click)="changeNewestState()"
+          class="tab-item {{ newestState ? 'tab-item-focus' : '' }}"
+        >
+          <h6>Newest</h6>
+        </button>
+        <button
+          (click)="changeOldestState()"
+          class="tab-item {{ oldestState ? 'tab-item-focus' : '' }}"
+        >
+          <h6>Oldest</h6>
+        </button>
+      </div>
       <div class="second-section">
         <div class="sub-header">
           <h6 class="title">Channel Videos</h6>
         </div>
-        <div class="first-content">
-          <app-video-renderer
-            *ngFor="let i of filteredCurrentVideos"
-            [video]="i"
-            [videos]="filteredCurrentVideos"
-          ></app-video-renderer>
+        <div class="parent">
+          <div
+            class="first-content"
+            *ngFor="let i of filteredCurrentVideos; let j = index"
+          >
+            <app-video-renderer
+              *ngIf="j < lastKey"
+              [video]="i"
+              [videos]="filteredCurrentVideos"
+            ></app-video-renderer>
+          </div>
+          <div class="end-point"></div>
         </div>
       </div>
     </div>
@@ -138,3 +164,4 @@
     </div>
   </div>
 </div>
+<div class="end-point"></div>
