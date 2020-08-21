@@ -66,6 +66,29 @@ export const getComments = gql`
   }
 `;
 
+export const updateComment = gql`
+  mutation updateCommentASD($commentId: ID!, $like: Int!, $dislike: Int!) {
+    updateComment(
+      id: $commentId
+      input: {
+        video_id: 1
+        comment_parent_id: 1
+        comment_value: "asd"
+        user_id: 1
+        comment_date: "asd"
+        likes: $like
+        dislikes: $dislike
+      }
+    ) {
+      id
+      likes
+      dislikes
+      video_id
+      comment_value
+    }
+  }
+`;
+
 @Component({
   selector: 'app-comment',
   templateUrl: './comment.component.html',
@@ -111,6 +134,8 @@ export class CommentComponent implements OnInit {
     comment_parent_id: number;
     comment_value: string;
     user_id: number;
+    likes: number;
+    dislikes: number;
   };
 
   userFromPickedComment: any;
@@ -176,4 +201,105 @@ export class CommentComponent implements OnInit {
       });
   }
   newComment: any;
+
+  likeCheck() {
+    if (this.userSession.getCurrentUserDB() != null) {
+      if (this.commentService.getStateForLike()[this.comment.id] == null) {
+        // like tmabah 1
+        this.updateComment(
+          this.comment.id,
+          this.comment.likes == -1 || this.comment.likes == 0
+            ? 1
+            : this.comment.likes + 1,
+          this.comment.dislikes
+        );
+
+        this.commentService.setStateForLike(this.comment.id, true);
+      } else if (
+        this.commentService.getStateForLike()[this.comment.id] == false
+      ) {
+        // dislike kurang 1
+        this.updateComment(
+          this.comment.id,
+          this.comment.likes == -1 || this.comment.likes == 0
+            ? 1
+            : this.comment.likes + 1,
+          this.comment.dislikes == -1 || this.comment.dislikes == 0
+            ? -1
+            : this.comment.dislikes - 1
+        );
+        // like tambah 1
+        this.commentService.setStateForLike(this.comment.id, true);
+      } else if (
+        this.commentService.getStateForLike()[this.comment.id] == true
+      ) {
+        this.updateComment(
+          this.comment.id,
+          this.comment.likes == -1 || this.comment.likes == 0
+            ? 1
+            : this.comment.likes - 1,
+          this.comment.dislikes
+        );
+
+        this.commentService.setStateForLike(this.comment.id, null);
+      }
+    }
+  }
+
+  dislikeCheck() {
+    if (this.userSession.getCurrentUserDB() != null) {
+      if (this.commentService.getStateForLike()[this.comment.id] == null) {
+        // like tmabah 1
+        this.updateComment(
+          this.comment.id,
+          this.comment.likes,
+          this.comment.dislikes == -1 || this.comment.dislikes == 0
+            ? 1
+            : this.comment.dislikes + 1
+        );
+
+        this.commentService.setStateForLike(this.comment.id, false);
+      } else if (
+        this.commentService.getStateForLike()[this.comment.id] == false
+      ) {
+        // dislike kurang 1
+        this.updateComment(
+          this.comment.id,
+          this.comment.likes,
+          this.comment.dislikes == -1 || this.comment.dislikes == 0
+            ? -1
+            : this.comment.dislikes - 1
+        );
+        // like tambah 1
+        this.commentService.setStateForLike(this.comment.id, null);
+      } else if (
+        this.commentService.getStateForLike()[this.comment.id] == true
+      ) {
+        this.updateComment(
+          this.comment.id,
+          this.comment.likes == -1 || this.comment.likes == 0
+            ? -1
+            : this.comment.likes - 1,
+          this.comment.dislikes == -1 || this.comment.dislikes == 0
+            ? 1
+            : this.comment.dislikes + 1
+        );
+
+        this.commentService.setStateForLike(this.comment.id, false);
+      }
+    }
+  }
+
+  updateComment(commentId: any, like: any, dislike: any) {
+    this.apollo
+      .mutate({
+        mutation: updateComment,
+        variables: {
+          commentId: commentId,
+          like: like,
+          dislike: dislike,
+        },
+      })
+      .subscribe((result) => {});
+  }
 }

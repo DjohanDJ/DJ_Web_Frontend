@@ -24,4 +24,10 @@ export class UserSessionService {
   getCurrentUserDB() {
     return this.currentUserInDB;
   }
+
+  public currentSubs: any = [];
+  public nextSubs: any = [];
+
+  // for subscription page
+  public subscriptionUsers: any = [];
 }

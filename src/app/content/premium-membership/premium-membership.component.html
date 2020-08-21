@@ -1,1 +1,83 @@
-<p>premium-membership works!</p>
+<div
+  *ngIf="userSession.getCurrentUserDB().membership == 'non-premium'"
+  class="content"
+>
+  <div class="main-title">
+    <img
+      class="image"
+      src="../../../assets/header-assets/main-logo.png"
+      alt=""
+    />
+    <h6>Premium</h6>
+  </div>
+  <div class="main-desc">
+    <h6>YouRJube and YouRJube Music ad-free,</h6>
+    <h6>offline, and in the background</h6>
+  </div>
+  <div class="main-desc">
+    <div class="tab">
+      <button (click)="getMembershipMonth()" class="tab-item">
+        <h6>
+          TRY IT
+        </h6>
+        <h6>IDR 59,000.00/month</h6>
+      </button>
+      <button (click)="getMembershipYear()" class="tab-item">
+        <h6>
+          TRY IT
+        </h6>
+        <h6>IDR 659,000.00/month</h6>
+      </button>
+    </div>
+  </div>
+</div>
+
+<div
+  *ngIf="userSession.getCurrentUserDB().membership == 'premium'"
+  class="content"
+>
+  <div class="secondary-title">
+    <h6 class="title">
+      Membership History
+    </h6>
+    <div class="ver-line"></div>
+    <div class="clear-item">
+      <div class="hor-line"></div>
+      <div class="first-row">
+        <h6>No.</h6>
+      </div>
+      <div class="hor-line"></div>
+      <div class="row">
+        <h6>Membership Date</h6>
+      </div>
+      <div class="hor-line"></div>
+      <div class="row">
+        <h6>Membership Type</h6>
+      </div>
+      <div class="hor-line"></div>
+    </div>
+    <div class="ver-line"></div>
+    <div *ngFor="let i of otherMembership; let j = index" class="history-item">
+      <div class="clear-item">
+        <div class="hor-line"></div>
+        <div class="first-row">
+          <h6>{{ j + 1 }}.</h6>
+        </div>
+        <div class="hor-line"></div>
+        <div class="row">
+          <h6>{{ i.join_premium_date }}</h6>
+        </div>
+        <div class="hor-line"></div>
+        <div class="row">
+          <h6>{{ i.member_type }}</h6>
+        </div>
+        <div class="hor-line"></div>
+      </div>
+      <div class="ver-line"></div>
+    </div>
+    <h6 class="exp-date">
+      Current Membership Expiration Date :
+      {{ userSession.getCurrentUserDB().expired_member }} • {{ editDate }}
+    </h6>
+  </div>
+</div>

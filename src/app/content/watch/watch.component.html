@@ -34,14 +34,30 @@
           <h6>
             {{ userFromPickedVideo ? userFromPickedVideo.username : "" }}
           </h6>
-          <h6 class="subscriber">
-            4.2M Subscribers
-          </h6>
+          <h6 class="subscriber">{{ editViewers }} Subscribers</h6>
         </div>
       </div>
-      <button class="subscribe-button">
-        <h6>SUBSCRIBE</h6>
-      </button>
+      <div class="subscibe-panel">
+        <button
+          *ngIf="
+            (userSession.getCurrentUserDB() ? true : false) &&
+            (userSession.getCurrentUserDB().id !=
+            (userFromPickedVideo ? userFromPickedVideo.id : '')
+              ? true
+              : false)
+          "
+          (click)="changeSubscribeState()"
+          class="subscribe-button {{
+            checkSubsRelation() ? 'subscribed-button' : ''
+          }}"
+        >
+          <h6 *ngIf="!checkSubsRelation()">SUBSCRIBE</h6>
+          <h6 *ngIf="checkSubsRelation()">SUBSCRIBED</h6>
+        </button>
+        <button class="bell-button" *ngIf="checkSubsRelation()">
+          <img src="../../../assets/header-assets/bxs-bell.svg" alt="" />
+        </button>
+      </div>
     </div>
     <div class="video-description">
       <h6>Detail Description</h6>
@@ -155,6 +171,13 @@
   </div>
   <div class="separator"></div>
   <div class="related-video">
-    Dummy First
+    <div *ngFor="let i of relatedVideos; let l = index">
+      <app-video-renderer
+        *ngIf="l < lastKeyRelated"
+        [video]="i"
+        [videos]="relatedVideos"
+      ></app-video-renderer>
+    </div>
+    <div class="end-point2"></div>
   </div>
 </div>

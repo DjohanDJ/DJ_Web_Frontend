@@ -20,7 +20,7 @@ export class TrendingComponent implements OnInit {
 
   getTrendingVideos(currentDate) {
     var allVideos = this.videoService.getVideos();
-    let i = 0;
+    let j = 0;
     for (let i = 0; i < allVideos.length; i++) {
       const element = allVideos[i];
       var dbDate = new Date(element.upload_date);
@@ -31,9 +31,9 @@ export class TrendingComponent implements OnInit {
       );
       if (differentDate <= 7) {
         this.videos.push(element);
-        i++;
+        j++;
       }
-      if (i == 20) {
+      if (j == 20) {
         break;
       }
     }
@@ -56,6 +56,12 @@ export class TrendingComponent implements OnInit {
     for (let i = 0; i < this.videos.length; i++) {
       const element = this.videos[i];
       if (element.location == this.locationService.getCurrentLocation()) {
+        this.videosByLocation.push(element);
+      }
+    }
+    for (let i = 0; i < this.videos.length; i++) {
+      const element = this.videos[i];
+      if (element.location != this.locationService.getCurrentLocation()) {
         this.videosByLocation.push(element);
       }
     }

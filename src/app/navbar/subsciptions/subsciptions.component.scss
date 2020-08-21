@@ -1,0 +1,46 @@
+.home-navigation-button {
+  display: flex;
+  align-items: center;
+  padding: 10px 0px 10px 0px;
+  width: 100%;
+}
+
+.home-navigation-button:hover {
+  .home-image,
+  .fire-image,
+  .subscription-image {
+    color: red;
+    transition: color 300ms ease-in;
+  }
+  h6 {
+    font-weight: bold;
+    color: black;
+  }
+  background-color: rgb(201, 201, 201);
+}
+
+.home-navigation-button:active {
+  background-color: rgb(201, 201, 201);
+}
+// On tab
+.home-navigation-button:focus {
+  background-color: rgb(221, 221, 221);
+  .home-image,
+  .fire-image,
+  .subscription-image {
+    color: red;
+    transition: color 300ms ease-out;
+  }
+  h6 {
+    font-weight: bold;
+    color: black;
+  }
+}
+
+.user-image {
+  margin-left: 18px;
+  margin-right: 10px;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+}

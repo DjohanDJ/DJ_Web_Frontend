@@ -21,20 +21,42 @@
     </div>
   </div>
   <div class="action">
-    <button class="action-button">
+    <button
+      [routerLink]="['/sending/' + videoId]"
+      (click)="likeCheck()"
+      class="action-button"
+    >
       <img
         class="action-image"
         src="../../../../assets/comments-assets/like-outlined.svg"
         alt=""
       />
     </button>
-    <button class="action-button">
+    <div class="text">
+      <h6>
+        {{ comment.likes == -1 || comment.likes == 0 ? "" : comment.likes }}
+      </h6>
+    </div>
+    <button
+      [routerLink]="['/sending/' + videoId]"
+      (click)="dislikeCheck()"
+      class="action-button"
+    >
       <img
         class="action-image"
         src="../../../../assets/comments-assets/dislike-outlined.svg"
         alt=""
       />
     </button>
+    <div class="text">
+      <h6>
+        {{
+          comment.dislikes == -1 || comment.dislikes == 0
+            ? ""
+            : comment.dislikes
+        }}
+      </h6>
+    </div>
     <button (click)="changeReplyState()" class="action-button">
       <h6>REPLY</h6>
     </button>

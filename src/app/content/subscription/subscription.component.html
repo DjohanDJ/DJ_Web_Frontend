@@ -1,1 +1,33 @@
-<p>subscription works!</p>
+<div class="home-section">
+  <h4 class="main-static-text">Today</h4>
+  <div class="video-content">
+    <div *ngFor="let i of todayVideos; let j = index">
+      <app-video-renderer
+        *ngIf="j < lastKey"
+        [video]="i"
+        [videos]="todayVideos"
+      ></app-video-renderer>
+    </div>
+  </div>
+  <h4 class="main-static-text">This Week</h4>
+  <div class="video-content">
+    <div *ngFor="let i of thisWeekVideos; let j = index">
+      <app-video-renderer
+        *ngIf="j < lastKey2"
+        [video]="i"
+        [videos]="thisWeekVideos"
+      ></app-video-renderer>
+    </div>
+  </div>
+  <h4 class="main-static-text">This Month</h4>
+  <div class="video-content">
+    <div *ngFor="let i of thisMonthVideos; let j = index">
+      <app-video-renderer
+        *ngIf="j < lastKey3"
+        [video]="i"
+        [videos]="thisMonthVideos"
+      ></app-video-renderer>
+    </div>
+  </div>
+  <div class="end-point"></div>
+</div>

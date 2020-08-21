@@ -27,4 +27,21 @@ export class NavbarComponent implements OnInit {
       this.subscriptionModalState = true;
     }
   }
+
+  closeState: boolean = true;
+  expandChannel() {
+    for (let i = 0; i < this.userSession.nextSubs.length; i++) {
+      this.userSession.currentSubs.push(this.userSession.nextSubs[i]);
+    }
+    this.closeState = false;
+  }
+
+  backNormal() {
+    var allCurrentSubs = this.userSession.currentSubs;
+    this.userSession.currentSubs = [];
+    for (let i = 0; i < 10; i++) {
+      this.userSession.currentSubs.push(allCurrentSubs[i]);
+    }
+    this.closeState = true;
+  }
 }

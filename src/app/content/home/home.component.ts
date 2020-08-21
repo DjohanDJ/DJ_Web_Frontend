@@ -73,12 +73,20 @@ export class HomeComponent implements OnInit {
   }
 
   videosByLocation: any = [];
+  videosNotByLocation: any = [];
   checkLocation() {
     for (let i = 0; i < this.shuffledVideos.length; i++) {
       const element = this.shuffledVideos[i];
       if (element.location == this.locationService.getCurrentLocation()) {
         this.videosByLocation.push(element);
+      } else {
+        this.videosNotByLocation.push(element);
       }
+    }
+
+    for (let i = 0; i < this.videosNotByLocation.length; i++) {
+      const element = this.videosNotByLocation[i];
+      this.videosByLocation.push(element);
     }
   }
 

@@ -40,7 +40,10 @@
       <h6 *ngIf="!display">Categories</h6>
     </button>
     <button
-      [routerLink]="['/premium-membership']"
+      [routerLink]="
+        this.userSession.getCurrentUser() ? ['/premium-membership'] : ''
+      "
+      (click)="checkUserAlreadySignIn()"
       class="home-navigation-button"
     >
       <div
@@ -52,6 +55,40 @@
       <h6 *ngIf="!display">Membership</h6>
     </button>
   </div>
+  <hr *ngIf="!display && userSession.getCurrentUserDB()" />
+  <div *ngIf="!display && userSession.getCurrentUserDB()" class="subs-section">
+    <h6>SUBSCRIPTIONS</h6>
+  </div>
+  <div *ngFor="let i of userSession.currentSubs">
+    <app-subsciptions
+      *ngIf="!display"
+      [user]="i"
+      [users]="userSession.currentSubs"
+    ></app-subsciptions>
+  </div>
+  <div
+    *ngIf="
+      (userSession.currentSubs.length + userSession.nextSubs.length > 10
+        ? true
+        : false) &&
+      closeState &&
+      !display
+    "
+    (click)="expandChannel()"
+    class="home-navigation-button padri"
+  >
+    <h6>
+      SHOW ALL CHANNEL
+    </h6>
+  </div>
+  <div
+    *ngIf="!closeState && !display"
+    (click)="backNormal()"
+    class="home-navigation-button padri"
+  >
+    <h6>HIDE CHANNEL</h6>
+  </div>
+
   <hr *ngIf="!display" />
   <div class="bottom-section">
     <div class="links-section">

@@ -140,6 +140,13 @@
         <h6>Keyboard Shortcut</h6>
       </button>
       <button
+        [routerLink]="['/restrictioning']"
+        (click)="changeLocationModalState()"
+        class="element-dropdown-menu"
+      >
+        <h6>Location</h6>
+      </button>
+      <button
         [routerLink]="['']"
         (click)="signOut()"
         class="element-dropdown-menu"

@@ -12,6 +12,10 @@
   margin-left: 10px;
 }
 
+// video {
+//   width: 800px;
+// }
+
 .related-video {
   padding: 10px;
   padding-left: 0;
@@ -83,6 +87,14 @@
   background-color: rgb(230, 0, 0);
   padding: 10px;
   border-radius: 2px;
+  &.subscribed-button {
+    background-color: rgb(90, 88, 88);
+  }
+}
+
+.subscibe-panel {
+  display: flex;
+  align-items: center;
 }
 
 .subscribe-button h6 {

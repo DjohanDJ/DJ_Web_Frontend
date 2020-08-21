@@ -60,6 +60,32 @@
     </button>
   </div>
   <div class="items-container">
+    <div class="filtering-container">
+      <button
+        (click)="changeAllPopular()"
+        class="tab-item {{ allTimePopular ? 'tab-item-focus' : '' }}"
+      >
+        <h6>All Time Popular</h6>
+      </button>
+      <button
+        (click)="changePopularThisWeek()"
+        class="tab-item {{ popularThisWeek ? 'tab-item-focus' : '' }}"
+      >
+        <h6>Popular This Week</h6>
+      </button>
+      <button
+        (click)="changePopularThisMonth()"
+        class="tab-item {{ popularThisMonth ? 'tab-item-focus' : '' }}"
+      >
+        <h6>Popular This Month</h6>
+      </button>
+      <button
+        (click)="changeRecentlyUpload()"
+        class="tab-item {{ recentlyUpload ? 'tab-item-focus' : '' }}"
+      >
+        <h6>Recently Upload</h6>
+      </button>
+    </div>
     <app-video-renderer-landscape
       *ngFor="let i of filteredVideos"
       [video]="i"

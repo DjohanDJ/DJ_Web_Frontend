@@ -82,6 +82,7 @@ export class ResultsComponent implements OnInit {
       })
       .valueChanges.subscribe((result) => {
         this.users = result.data.users;
+        this.checkContainUser();
       });
   }
   searchQuery: string;
@@ -108,6 +109,7 @@ export class ResultsComponent implements OnInit {
     this.channelState = false;
     this.filteredVideos = [];
     this.filteredVideos = this.videos;
+    this.checkContainUser();
   }
 
   changeThisWeekState() {
@@ -190,6 +192,7 @@ export class ResultsComponent implements OnInit {
   }
 
   checkContainUser() {
+    this.filteredUsers = [];
     for (let i = 0; i < this.users.length; i++) {
       const element = this.users[i];
       if (

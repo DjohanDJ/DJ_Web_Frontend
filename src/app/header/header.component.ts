@@ -14,8 +14,15 @@ export const searchUserByEmail = gql`
       username
       email
       user_password
+      user_image
       channel_name
       channel_banner
+      restriction
+      location
+      channel_desc
+      membership
+      expired_member
+      join_date
     }
   }
 `;
@@ -35,6 +42,13 @@ export const createUser = gql`
         user_password: $user_password
         channel_name: $channel_name
         user_image: $user_image
+        channel_banner: "./../../assets/dummy-channel-assets/dj4_banner.jpg"
+        channel_desc: "Inspire people for code!"
+        restriction: "mature"
+        location: "Indonesia"
+        membership: ""
+        expired_member: ""
+        join_date: ""
       }
     ) {
       id
@@ -43,6 +57,50 @@ export const createUser = gql`
       user_password
       channel_name
       user_image
+    }
+  }
+`;
+
+export const updateUser = gql`
+  mutation updateUserAttrib(
+    $userID: ID!
+    $username: String!
+    $email: String!
+    $user_password: String!
+    $channel_name: String!
+    $user_image: String!
+    $channel_banner: String!
+    $channel_desc: String!
+    $restriction: String!
+    $location: String!
+    $membership: String!
+    $expired_date: String!
+    $join_date: String!
+  ) {
+    updateUser(
+      id: $userID
+      input: {
+        username: $username
+        email: $email
+        user_password: $user_password
+        channel_name: $channel_name
+        user_image: $user_image
+        channel_banner: $channel_banner
+        channel_desc: $channel_desc
+        restriction: $restriction
+        location: $location
+        membership: $membership
+        expired_member: $expired_date
+        join_date: $join_date
+      }
+    ) {
+      id
+      username
+      email
+      user_password
+      channel_name
+      user_image
+      location
     }
   }
 `;
@@ -94,6 +152,7 @@ export class HeaderComponent implements OnInit {
     this.userSession.setCurrentUserDB(null);
     this.authService.signOut();
     this.dropdownDisplay = false;
+    this.userSession.currentSubs = [];
   }
 
   // Save the user
@@ -175,6 +234,10 @@ export class HeaderComponent implements OnInit {
           this.createNewUser();
         }
         this.userSession.setCurrentUserDB(this.currentUserinDB);
+        // ngatur subscription
+
+        this.getCurrentUsers();
+        this.getSubscriber();
       });
   }
 
@@ -210,12 +273,18 @@ export class HeaderComponent implements OnInit {
   noRestriction() {
     this.restrictionToggle = false;
     this.videoService.changeRestriction(false);
+    if (this.userSession.getCurrentUserDB() != null) {
+      this.updateUserRestriction('mature');
+    }
     window.scrollTo(0, 0);
   }
 
   restrictionOnlyKids() {
     this.restrictionToggle = false;
     this.videoService.changeRestriction(true);
+    if (this.userSession.getCurrentUserDB() != null) {
+      this.updateUserRestriction('kid');
+    }
     window.scrollTo(0, 0);
   }
 
@@ -239,29 +308,180 @@ export class HeaderComponent implements OnInit {
     this.locationService.setCurrentLocation('Indonesia');
     this.locationModalState = false;
     this.settingsDropdownState = false;
+    if (this.userSession.getCurrentUserDB() != null) {
+      this.updateUserLocation('Indonesia');
+    }
   }
 
   changeLocationHK() {
     this.locationService.setCurrentLocation('Hong Kong');
     this.locationModalState = false;
     this.settingsDropdownState = false;
+    if (this.userSession.getCurrentUserDB() != null) {
+      this.updateUserLocation('Hong Kong');
+    }
   }
 
   changeLocationAus() {
     this.locationService.setCurrentLocation('Australia');
     this.locationModalState = false;
     this.settingsDropdownState = false;
+    if (this.userSession.getCurrentUserDB() != null) {
+      this.updateUserLocation('Australia');
+    }
   }
 
   changeLocationChi() {
     this.locationService.setCurrentLocation('China');
     this.locationModalState = false;
     this.settingsDropdownState = false;
+    if (this.userSession.getCurrentUserDB() != null) {
+      this.updateUserLocation('China');
+    }
   }
 
   changeLocationAmr() {
     this.locationService.setCurrentLocation('America');
     this.locationModalState = false;
     this.settingsDropdownState = false;
+    if (this.userSession.getCurrentUserDB() != null) {
+      this.updateUserLocation('America');
+    }
+  }
+
+  updateUserRestriction(restric: any) {
+    this.apollo
+      .mutate({
+        mutation: updateUser,
+        variables: {
+          userID: this.userSession.getCurrentUserDB().id,
+          username: this.user.name,
+          email: this.user.email,
+          user_password: 'None',
+          channel_name: this.user.name,
+          user_image: this.user.photoUrl,
+          channel_banner: this.userSession.getCurrentUserDB().channel_banner,
+          channel_desc: this.userSession.getCurrentUserDB().channel_desc,
+          restriction: restric,
+          location: this.userSession.getCurrentUserDB().location,
+          membership: this.userSession.getCurrentUserDB().membership,
+          expired_date: this.userSession.getCurrentUserDB().expired_member,
+          join_date: this.userSession.getCurrentUserDB().join_date,
+        },
+      })
+      .subscribe((result) => {});
+  }
+
+  updateUserLocation(locationParam: any) {
+    this.apollo
+      .mutate({
+        mutation: updateUser,
+        variables: {
+          userID: this.userSession.getCurrentUserDB().id,
+          username: this.user.name,
+          email: this.user.email,
+          user_password: 'None',
+          channel_name: this.user.name,
+          user_image: this.user.photoUrl,
+          channel_banner: this.userSession.getCurrentUserDB().channel_banner,
+          channel_desc: this.userSession.getCurrentUserDB().channel_desc,
+          restriction: this.userSession.getCurrentUserDB().restriction,
+          location: locationParam,
+          membership: this.userSession.getCurrentUserDB().membership,
+          expired_date: this.userSession.getCurrentUserDB().expired_member,
+          join_date: this.userSession.getCurrentUserDB().join_date,
+        },
+      })
+      .subscribe((result) => {});
+  }
+
+  // subscription
+  allSubscribers: any = [];
+  currentSubscriber: any = [];
+  getSubscriber(): boolean {
+    this.apollo
+      .watchQuery<any>({
+        query: getAllSubscriber,
+      })
+      .valueChanges.subscribe((result) => {
+        this.allSubscribers = result.data.subscribers;
+        this.getCurrentSubscriber();
+        return true;
+      });
+    return false;
+  }
+
+  getCurrentSubscriber() {
+    this.currentSubscriber = [];
+    this.userSession.currentSubs = [];
+    this.userSession.nextSubs = [];
+    var counter = 0;
+    for (let i = 0; i < this.allSubscribers.length; i++) {
+      const element = this.allSubscribers[i];
+      if (this.userSession.getCurrentUserDB().id == element.user_id) {
+        this.currentSubscriber.push(element);
+        for (let j = 0; j < this.allUsers.length; j++) {
+          const element2 = this.allUsers[j];
+          if (element2.id == element.channel_id && counter <= 9) {
+            this.userSession.currentSubs.push(element2);
+            counter++;
+          } else if (element2.id == element.channel_id && counter > 9) {
+            this.userSession.nextSubs.push(element2);
+            counter++;
+          }
+        }
+      }
+    }
+    this.sortChannelByName();
+  }
+
+  allUsers: any = [];
+
+  getCurrentUsers() {
+    this.apollo
+      .watchQuery<any>({
+        query: searchUserById,
+      })
+      .valueChanges.subscribe((result) => {
+        this.allUsers = result.data.users;
+      });
+  }
+
+  sortChannelByName() {
+    this.userSession.currentSubs = [] = this.userSession.currentSubs.sort(
+      (n1, n2) => {
+        if (n1.username > n2.username) {
+          return 1;
+        } else return -1;
+      }
+    );
   }
 }
+
+export const getAllSubscriber = gql`
+  query getSubscribers {
+    subscribers {
+      id
+      channel_id
+      user_id
+    }
+  }
+`;
+
+export const searchUserById = gql`
+  query getUsers {
+    users {
+      id
+      username
+      channel_name
+      user_image
+      channel_banner
+      channel_desc
+      restriction
+      location
+      membership
+      expired_member
+      join_date
+    }
+  }
+`;

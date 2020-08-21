@@ -5,7 +5,9 @@
       <h6>
         {{ user ? user.username : "" }}
       </h6>
-      <h6 class="subscriber">4.2M Subscribers • {{ videoCount }} videos</h6>
+      <h6 class="subscriber">
+        {{ editViewers }} Subscribers • {{ videoCount }} videos
+      </h6>
       <h6 class="subscriber">
         {{ user.channel_desc }}
       </h6>
@@ -13,13 +15,21 @@
   </button>
   <div class="subscibe-panel">
     <button
+      *ngIf="
+        (userSession.getCurrentUserDB() ? true : false) &&
+        (userSession.getCurrentUserDB().id != (user ? user.id : '')
+          ? true
+          : false)
+      "
       (click)="changeSubscribeState()"
-      class="subscribe-button {{ subscribeState ? 'subscribed-button' : '' }}"
+      class="subscribe-button {{
+        checkSubsRelation() ? 'subscribed-button' : ''
+      }}"
     >
-      <h6 *ngIf="!subscribeState">SUBSCRIBE</h6>
-      <h6 *ngIf="subscribeState">SUBSCRIBED</h6>
+      <h6 *ngIf="!checkSubsRelation()">SUBSCRIBE</h6>
+      <h6 *ngIf="checkSubsRelation()">SUBSCRIBED</h6>
     </button>
-    <button class="bell-button" *ngIf="subscribeState">
+    <button class="bell-button" *ngIf="checkSubsRelation()">
       <img src="../../../assets/header-assets/bxs-bell.svg" alt="" />
     </button>
   </div>

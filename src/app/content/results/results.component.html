@@ -43,6 +43,14 @@
       <h6>Channel</h6>
     </button>
   </div>
+  <div *ngIf="allState && !videoState" class="video-content">
+    <app-user-renderer
+      *ngFor="let i of filteredUsers"
+      [user]="i"
+      [users]="filteredUsers"
+    >
+    </app-user-renderer>
+  </div>
   <div *ngIf="!channelState" class="video-content">
     <app-video-renderer-landscape
       *ngFor="let i of filteredVideos"

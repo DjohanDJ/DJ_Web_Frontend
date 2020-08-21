@@ -1,22 +1,27 @@
 <div class="video-renderer-container">
-  <button
-    [routerLink]="['/watch/' + video.id]"
-    (click)="getVideoDetail()"
-    class="click-bait-button"
-  >
-    <div class="video-section">
+  <button class="click-bait-button">
+    <button
+      [routerLink]="['/watch/' + video.id]"
+      (click)="getVideoDetail()"
+      class="video-section"
+    >
       <img class="video-image" src="{{ video.image_path }}" alt="" />
-    </div>
+    </button>
     <div class="video-profile">
-      <div class="profile-image-container">
+      <button
+        [routerLink]="[
+          '/channel/' + (userFromPickedVideo ? userFromPickedVideo.id : '')
+        ]"
+        class="profile-image-container"
+      >
         <img class="profile-image" src="{{ userImage }}" alt="" />
-      </div>
+      </button>
       <div class="video-title">
-        {{ video.title }}
+        {{ editTitle }}
       </div>
     </div>
     <div class="video-description">
-      {{ video.view_count }} views • Upload at {{ video.upload_date }}
+      {{ channelName }} • {{ editViewers }} views • Uploaded {{ editDate }}
     </div>
   </button>
 </div>

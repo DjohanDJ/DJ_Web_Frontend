@@ -30,6 +30,10 @@
   padding: 5px 0px;
 }
 
+.subs-section {
+  padding: 10px 20px;
+}
+
 h6 {
   color: rgb(88, 88, 88);
 }
@@ -39,6 +43,9 @@ h6 {
   align-items: center;
   padding: 10px 0px 10px 0px;
   width: 100%;
+  &.padri {
+    padding-left: 20px;
+  }
 }
 
 .home-image,

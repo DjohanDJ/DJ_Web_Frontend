@@ -67,6 +67,32 @@ export const createComment = gql`
   }
 `;
 
+export const insertSubscriber = gql`
+  mutation insertSubscriber($channel_id: Int!, $user_id: Int!) {
+    createSubscriber(input: { channel_id: $channel_id, user_id: $user_id }) {
+      id
+      channel_id
+      user_id
+    }
+  }
+`;
+
+export const deleteSubscriber = gql`
+  mutation deleteSubscriber($deleteId: ID!) {
+    deleteSubscriber(id: $deleteId)
+  }
+`;
+
+export const getAllSubscriber = gql`
+  query getSubscribers {
+    subscribers {
+      id
+      channel_id
+      user_id
+    }
+  }
+`;
+
 @Component({
   selector: 'app-watch',
   templateUrl: './watch.component.html',
@@ -80,12 +106,28 @@ export class WatchComponent implements OnInit {
     private apollo: Apollo,
     public commentService: CommentDetailService,
     private router: Router
-  ) {}
+  ) {
+    this.router.routeReuseStrategy.shouldReuseRoute = function () {
+      return false;
+    };
+
+    this.router.events.subscribe((evt) => {
+      if (evt instanceof NavigationEnd) {
+        // trick the Router into believing it's last link wasn't previously loaded
+        this.router.navigated = false;
+        // if you need to scroll back to top, here is the right place
+        window.scrollTo(0, 0);
+      }
+    });
+  }
 
   // infinite scroll
   lastKey = 100;
   observer: any;
   useInfScroll: boolean = true;
+
+  lastKeyRelated: number;
+  observerRelated: any;
 
   ngOnInit(): void {
     if (this.userSession.getCurrentUser() == null) {
@@ -106,6 +148,26 @@ export class WatchComponent implements OnInit {
       });
       this.observer.observe(document.querySelector('.end-point'));
     }
+
+    window.scrollTo(0, 0);
+    this.lastKeyRelated = 4;
+    this.observerRelated = new IntersectionObserver((entry) => {
+      if (entry[0].isIntersecting) {
+        let main = document.querySelector('.related-video');
+        if (this.lastKeyRelated < this.relatedVideos.length) {
+          let div = document.createElement('div');
+          let video = document.createElement('app-video-renderer');
+          video.setAttribute(
+            'video',
+            'this.relatedVideos[this.lastKeyRelated]'
+          );
+          div.appendChild(video);
+          main.appendChild(div);
+          this.lastKeyRelated++;
+        }
+      }
+    });
+    this.observerRelated.observe(document.querySelector('.end-point2'));
 
     this.urlId = this.route.snapshot.params.id - 1;
     this.selectedVideo = this.videoDetailService.getVideos()[this.urlId];
@@ -137,6 +199,9 @@ export class WatchComponent implements OnInit {
         }
         this.getCurrentComments();
       });
+
+    this.getRelatedVideos();
+    this.getSubscriber();
   }
 
   @Input() selectedVideo: {
@@ -148,6 +213,8 @@ export class WatchComponent implements OnInit {
     upload_date: string;
     video_path: string;
     user_id: number;
+    location: string;
+    category_id: number;
   };
   @Input() urlId: number;
 
@@ -291,5 +358,183 @@ export class WatchComponent implements OnInit {
         return 1;
       } else return -1;
     });
+  }
+
+  relatedVideos: any = [];
+  notRelatedVideos: any = [];
+  firstVideos: any = [];
+
+  getRelatedVideos() {
+    this.firstVideos = this.videoDetailService.getVideos();
+
+    for (let i = 0; i < this.firstVideos.length; i++) {
+      const element = this.firstVideos[i];
+      if (
+        this.selectedVideo.location == element.location &&
+        this.selectedVideo.category_id == element.category_id &&
+        this.selectedVideo.id != element.id
+      ) {
+        this.relatedVideos.push(element);
+      } else {
+        this.notRelatedVideos.push(element);
+      }
+    }
+
+    for (let i = 0; i < this.notRelatedVideos.length; i++) {
+      const element = this.notRelatedVideos[i];
+      this.relatedVideos.push(element);
+    }
+  }
+
+  // subscribing
+
+  subscribeState: boolean = false;
+  deleteId: number;
+
+  changeSubscribeState() {
+    this.checkSubsRelation();
+    if (this.subscribeState == true) {
+      this.deleteSubscriber(this.deleteId);
+    } else {
+      this.insertSubscriber(
+        Number(this.userFromPickedVideo.id),
+        Number(this.userSession.getCurrentUserDB().id)
+      );
+    }
+    this.subscribeState = !this.subscribeState;
+  }
+
+  checkSubsRelation(): boolean {
+    // console.log(this.allSubscribers);
+    if (this.userSession.getCurrentUserDB() != null) {
+      for (let i = 0; i < this.allSubscribers.length; i++) {
+        const element = this.allSubscribers[i];
+        if (
+          this.userSession.getCurrentUserDB().id == element.user_id &&
+          this.userFromPickedVideo.id == element.channel_id
+        ) {
+          this.subscribeState = true;
+          this.deleteId = element.id;
+          return true;
+          break;
+        }
+      }
+      this.subscribeState = false;
+      return false;
+    }
+  }
+
+  insertSubscriber(channelId: any, userId: any) {
+    this.apollo
+      .mutate({
+        mutation: insertSubscriber,
+        variables: {
+          channel_id: channelId,
+          user_id: userId,
+        },
+        refetchQueries: [
+          {
+            query: getAllSubscriber,
+            variables: { repoFullName: 'apollographql/apollo-client' },
+          },
+        ],
+      })
+      .subscribe((result) => {});
+  }
+
+  deleteSubscriber(subsId: any) {
+    this.apollo
+      .mutate({
+        mutation: deleteSubscriber,
+        variables: {
+          deleteId: subsId,
+        },
+        refetchQueries: [
+          {
+            query: getAllSubscriber,
+            variables: { repoFullName: 'apollographql/apollo-client' },
+          },
+        ],
+      })
+      .subscribe((result) => {});
+  }
+
+  getSubscriber() {
+    this.apollo
+      .watchQuery<any>({
+        query: getAllSubscriber,
+      })
+      .valueChanges.subscribe((result) => {
+        this.allSubscribers = result.data.subscribers;
+        this.getCurrentSubscriber();
+        this.checkSubsRelation();
+      });
+  }
+
+  getCurrentSubscriber() {
+    this.countSubscriber = 0;
+    for (let i = 0; i < this.allSubscribers.length; i++) {
+      const element = this.allSubscribers[i];
+      if (this.userFromPickedVideo.id == element.channel_id) {
+        this.countSubscriber++;
+        this.currentSubscriber.push(element);
+      }
+    }
+    this.changeSubsFormat();
+  }
+
+  countSubscriber: number;
+  currentSubscriber: any = [];
+  allSubscribers: any = [];
+
+  temp: any;
+  editViewers: any;
+  changeSubsFormat() {
+    this.temp = this.countSubscriber;
+    if (this.temp >= 1000000000) {
+      if (this.temp % 1000000000 != 0) {
+        this.temp = Math.floor(this.temp / 100000000);
+        if (this.temp % 10 != 0) {
+          this.temp /= 10;
+          this.editViewers = this.temp.toFixed(1) + 'B';
+        } else {
+          this.temp /= 10;
+          this.editViewers = this.temp.toString() + 'B';
+        }
+      } else {
+        this.temp = this.temp / 1000000000;
+        this.editViewers = this.temp.toString() + 'B';
+      }
+    } else if (this.temp >= 1000000) {
+      if (this.temp % 1000000 != 0) {
+        this.temp = Math.floor(this.temp / 100000);
+        if (this.temp % 10 != 0) {
+          this.temp /= 10;
+          this.editViewers = this.temp.toFixed(1) + 'M';
+        } else {
+          this.temp /= 10;
+          this.editViewers = this.temp.toString() + 'M';
+        }
+      } else {
+        this.temp = this.temp / 1000000;
+        this.editViewers = this.temp.toString() + 'M';
+      }
+    } else if (this.temp >= 1000) {
+      if (this.temp % 1000 != 0) {
+        this.temp = Math.floor(this.temp / 100);
+        if (this.temp % 10 != 0) {
+          this.temp /= 10;
+          this.editViewers = this.temp.toFixed(1) + 'K';
+        } else {
+          this.temp /= 10;
+          this.editViewers = this.temp.toString() + 'K';
+        }
+      } else {
+        this.temp = this.temp / 1000;
+        this.editViewers = this.temp.toString() + 'K';
+      }
+    } else {
+      this.editViewers = this.temp.toString();
+    }
   }
 }

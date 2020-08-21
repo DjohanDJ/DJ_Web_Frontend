@@ -29,6 +29,7 @@ import { CategoryComponent } from './content/category/category.component';
 import { CommentComponent } from './content/watch/comment/comment.component';
 import { SendingComponent } from './content/watch/sending/sending.component';
 import { UserRendererComponent } from './content/results/user-renderer/user-renderer.component';
+import { SubsciptionsComponent } from './navbar/subsciptions/subsciptions.component';
 
 @NgModule({
   declarations: [
@@ -51,6 +52,7 @@ import { UserRendererComponent } from './content/results/user-renderer/user-rend
     CommentComponent,
     SendingComponent,
     UserRendererComponent,
+    SubsciptionsComponent,
   ],
   imports: [
     BrowserModule,

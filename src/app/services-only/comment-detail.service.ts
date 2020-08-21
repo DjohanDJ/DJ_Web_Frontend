@@ -34,4 +34,14 @@ export class CommentDetailService {
   getSortLikeState(): boolean {
     return this.sortLikeState;
   }
+
+  stateForLike: any = [];
+
+  setStateForLike(index: any, value: any) {
+    this.stateForLike[index] = value;
+  }
+
+  getStateForLike() {
+    return this.stateForLike;
+  }
 }
