@@ -2,6 +2,7 @@ import { Component, OnInit, Input } from '@angular/core';
 import { VideoDetailService } from '../../services-only/video-detail.service';
 import { Apollo } from 'apollo-angular';
 import gql from 'graphql-tag';
+import { Router } from '@angular/router';
 
 export const searchUserByID = gql`
   query searchUserByID($userId: Int!) {
@@ -32,11 +33,13 @@ export class VideoRendererComponent implements OnInit {
     video_path: string;
     user_id: number;
     restriction: string;
+    duration: string;
   };
 
   constructor(
     private videoDetailService: VideoDetailService,
-    private apollo: Apollo
+    private apollo: Apollo,
+    private router: Router
   ) {}
 
   userFromPickedVideo: any = null;
@@ -65,6 +68,7 @@ export class VideoRendererComponent implements OnInit {
   getVideoDetail() {
     this.selectedVideo = this.videos[this.video.id - 1];
     this.videoDetailService.setVideos(this.videos);
+    // this.router.navigateByUrl('/watch/' + this.video.id + '/0?time=14');
   }
   @Input() videos: any;
   @Input() selectedVideo: any;

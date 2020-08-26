@@ -15,6 +15,7 @@ export const searchVideosQuery = gql`
       upload_date
       video_path
       user_id
+      duration
     }
   }
 `;

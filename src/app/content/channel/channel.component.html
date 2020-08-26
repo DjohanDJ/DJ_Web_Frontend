@@ -158,7 +158,12 @@
       </div>
     </div>
     <div *ngIf="playlistState" class="playlist">
-      this is playlist
+      <div
+        *ngFor="let i of showedPlaylist; let j = index"
+        class="second-section"
+      >
+        {{ i.title }}{{ currentVideo[j].image_path }}
+      </div>
     </div>
     <div *ngIf="communityState" class="community">
       this is community

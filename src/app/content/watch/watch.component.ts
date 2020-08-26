@@ -128,80 +128,103 @@ export class WatchComponent implements OnInit {
 
   lastKeyRelated: number;
   observerRelated: any;
+  playlistParamId: any;
 
   ngOnInit(): void {
-    if (this.userSession.getCurrentUser() == null) {
+    this.route.paramMap.subscribe((params) => {
+      if (this.userSession.getCurrentUser() == null) {
+        window.scrollTo(0, 0);
+        this.lastKey = 4;
+        this.observer = new IntersectionObserver((entry) => {
+          if (entry[0].isIntersecting) {
+            let main = document.querySelector('.parent');
+            if (this.lastKey < this.allComments.length) {
+              let div = document.createElement('div');
+              let video = document.createElement('app-comment');
+              video.setAttribute(
+                'comment',
+                'this.currentComments[this.lastKey]'
+              );
+              div.appendChild(video);
+              main.appendChild(div);
+              this.lastKey++;
+            }
+          }
+        });
+        this.observer.observe(document.querySelector('.end-point'));
+      }
+
       window.scrollTo(0, 0);
-      this.lastKey = 4;
-      this.observer = new IntersectionObserver((entry) => {
+      this.lastKeyRelated = 4;
+      this.observerRelated = new IntersectionObserver((entry) => {
         if (entry[0].isIntersecting) {
-          let main = document.querySelector('.parent');
-          if (this.lastKey < this.allComments.length) {
+          let main = document.querySelector('.related-video');
+          if (this.lastKeyRelated < this.relatedVideos.length) {
             let div = document.createElement('div');
-            let video = document.createElement('app-comment');
-            video.setAttribute('comment', 'this.currentComments[this.lastKey]');
+            let video = document.createElement('app-video-renderer');
+            video.setAttribute(
+              'video',
+              'this.relatedVideos[this.lastKeyRelated]'
+            );
             div.appendChild(video);
             main.appendChild(div);
-            this.lastKey++;
+            this.lastKeyRelated++;
           }
         }
       });
-      this.observer.observe(document.querySelector('.end-point'));
-    }
+      this.observerRelated.observe(document.querySelector('.end-point2'));
 
-    window.scrollTo(0, 0);
-    this.lastKeyRelated = 4;
-    this.observerRelated = new IntersectionObserver((entry) => {
-      if (entry[0].isIntersecting) {
-        let main = document.querySelector('.related-video');
-        if (this.lastKeyRelated < this.relatedVideos.length) {
-          let div = document.createElement('div');
-          let video = document.createElement('app-video-renderer');
-          video.setAttribute(
-            'video',
-            'this.relatedVideos[this.lastKeyRelated]'
-          );
-          div.appendChild(video);
-          main.appendChild(div);
-          this.lastKeyRelated++;
-        }
+      this.urlId = this.route.snapshot.params.id - 1;
+      this.selectedVideo = this.videoDetailService.getVideos()[this.urlId];
+      this.videoId = this.route.snapshot.params.id;
+      this.playlistParamId = this.route.snapshot.params.pid;
+
+      this.apollo
+        .watchQuery<any>({
+          query: searchUserById,
+          variables: {
+            searchId: this.selectedVideo.user_id,
+          },
+        })
+        .valueChanges.subscribe((result) => {
+          this.userFromPickedVideo = result.data.searchUserByID;
+        });
+
+      this.apollo
+        .watchQuery<any>({
+          query: getComments,
+        })
+        .valueChanges.subscribe((result) => {
+          // this.allComments = result.data.comments;
+          this.commentService.setAllComments(result.data.comments);
+          this.allComments = this.commentService.getAllComments();
+          if (this.commentService.getSortNewState()) {
+            this.sortCommentsByNewest();
+          } else {
+            this.sortCommentsByLike();
+          }
+          this.getCurrentComments();
+        });
+
+      if (this.playlistParamId == 0) {
+        this.getRelatedVideos();
+      } else {
+        this.getQueuePlaylist();
       }
+      this.getSubscriber();
+      this.autoplayNextVideo();
     });
-    this.observerRelated.observe(document.querySelector('.end-point2'));
 
-    this.urlId = this.route.snapshot.params.id - 1;
-    this.selectedVideo = this.videoDetailService.getVideos()[this.urlId];
-    this.videoId = this.route.snapshot.params.id;
-
-    this.apollo
-      .watchQuery<any>({
-        query: searchUserById,
-        variables: {
-          searchId: this.selectedVideo.user_id,
-        },
-      })
-      .valueChanges.subscribe((result) => {
-        this.userFromPickedVideo = result.data.searchUserByID;
-      });
-
-    this.apollo
-      .watchQuery<any>({
-        query: getComments,
-      })
-      .valueChanges.subscribe((result) => {
-        // this.allComments = result.data.comments;
-        this.commentService.setAllComments(result.data.comments);
-        this.allComments = this.commentService.getAllComments();
-        if (this.commentService.getSortNewState()) {
-          this.sortCommentsByNewest();
-        } else {
-          this.sortCommentsByLike();
-        }
-        this.getCurrentComments();
-      });
-
-    this.getRelatedVideos();
-    this.getSubscriber();
+    (document.getElementById('video') as HTMLVideoElement).addEventListener(
+      'onloadedmetadata',
+      () => {
+        (document.getElementById(
+          'inputIdTime'
+        ) as HTMLInputElement).value = (document.getElementById(
+          'video'
+        ) as HTMLVideoElement).duration.toString();
+      }
+    );
   }
 
   @Input() selectedVideo: {
@@ -375,7 +398,7 @@ export class WatchComponent implements OnInit {
         this.selectedVideo.id != element.id
       ) {
         this.relatedVideos.push(element);
-      } else {
+      } else if (this.selectedVideo.id != element.id) {
         this.notRelatedVideos.push(element);
       }
     }
@@ -384,6 +407,28 @@ export class WatchComponent implements OnInit {
       const element = this.notRelatedVideos[i];
       this.relatedVideos.push(element);
     }
+
+    if (this.videoDetailService.currentNextVideo != null) {
+      // for (let i = 0; i < this.relatedVideos.length; i++) {
+      //   if (
+      //     this.relatedVideos[i].id ==
+      //     this.videoDetailService.currentNextVideo.id
+      //   ) {
+      //     console.log(this.videoDetailService.currentNextVideo);
+      //   }
+      // }
+      this.relatedVideos.push(this.videoDetailService.currentNextVideo);
+      this.relatedVideos.splice(0, 1);
+    }
+  }
+
+  // get playlist
+  currentAllVideos: any = [];
+  currentVideo: any;
+  getQueuePlaylist() {
+    this.currentAllVideos = [];
+    this.currentAllVideos = this.videoDetailService.parsedVideoQueue;
+    this.relatedVideos = this.currentAllVideos;
   }
 
   // subscribing
@@ -536,5 +581,194 @@ export class WatchComponent implements OnInit {
     } else {
       this.editViewers = this.temp.toString();
     }
+  }
+
+  video: any;
+  hotkeys() {
+    this.video = document.getElementById('video') as HTMLVideoElement;
+    var audio_element = this.video;
+    document.onkeydown = function (event) {
+      switch (event.keyCode) {
+        case 38:
+          event.preventDefault();
+          var audio_vol = audio_element.volume;
+          if (audio_vol != 1) {
+            try {
+              var x = audio_vol + 0.02;
+              audio_element.volume = x;
+            } catch (err) {
+              audio_element.volume = 1;
+            }
+          }
+
+          break;
+        case 40:
+          event.preventDefault();
+          var audio_vol = audio_element.volume;
+          if (audio_vol != 0) {
+            try {
+              var y = 0;
+              y = audio_vol - 0.02;
+              audio_element.volume = y;
+            } catch (err) {
+              audio_element.volume = 0;
+            }
+          }
+          break;
+        case 74:
+          event.preventDefault();
+          audio_element.currentTime -= 10;
+          break;
+        case 75:
+          event.preventDefault();
+          audio_element.paused == false
+            ? audio_element.pause()
+            : audio_element.play();
+          break;
+        case 76:
+          event.preventDefault();
+          audio_element.currentTime += 10;
+          break;
+
+        case 70:
+          event.preventDefault();
+          audio_element.requestFullscreen();
+          break;
+      }
+    };
+  }
+
+  ngOnDestroy() {
+    this.deletekeys();
+  }
+
+  deletekeys() {
+    document.onkeydown = function (event) {};
+  }
+
+  autoplayNextVideo() {
+    if (this.videoDetailService.autoPlayState) {
+      document
+        .getElementById('video')
+        .addEventListener('ended', this.logicNext);
+    }
+  }
+
+  logicNext = () => {
+    this.videoDetailService.currentNextVideo = this.selectedVideo;
+    if (this.playlistParamId == 0) {
+      this.router.navigateByUrl(
+        '/watch/' + this.relatedVideos[0].id + '/' + this.playlistParamId
+      );
+    } else {
+      let index = 0;
+      for (let i = 0; i < this.relatedVideos.length; i++) {
+        if (this.relatedVideos[i].id == this.videoId) {
+          index = i;
+          break;
+        }
+      }
+      if (index != this.relatedVideos.length - 1) {
+        this.router.navigateByUrl(
+          '/watch/' +
+            this.relatedVideos[index + 1].id +
+            '/' +
+            this.playlistParamId
+        );
+      }
+    }
+  };
+
+  changeAutoPlayState() {
+    this.videoDetailService.autoPlayState = !this.videoDetailService
+      .autoPlayState;
+    if (this.videoDetailService.autoPlayState) {
+      this.autoplayNextVideo();
+    } else {
+      document
+        .getElementById('video')
+        .removeEventListener('ended', this.logicNext);
+    }
+  }
+
+  nextPlayVideo() {
+    this.videoDetailService.currentNextVideo = this.selectedVideo;
+    if (this.playlistParamId == 0) {
+      this.router.navigateByUrl(
+        '/watch/' + this.relatedVideos[0].id + '/' + this.playlistParamId
+      );
+    } else {
+      let index = 0;
+      for (let i = 0; i < this.relatedVideos.length; i++) {
+        if (this.relatedVideos[i].id == this.videoId) {
+          index = i;
+          break;
+        }
+      }
+      if (index != this.relatedVideos.length - 1) {
+        this.router.navigateByUrl(
+          '/watch/' +
+            this.relatedVideos[index + 1].id +
+            '/' +
+            this.playlistParamId
+        );
+      }
+    }
+  }
+
+  changeSharingState() {
+    this.videoDetailService.sharingState = !this.videoDetailService
+      .sharingState;
+    (document.getElementById('inputId') as HTMLInputElement).value =
+      location.href;
+    window.scrollTo(0, 0);
+    this.videoDetailService.checkBooleanTime = true;
+
+    var seconds = Math.floor(
+      (document.getElementById('video') as HTMLVideoElement).currentTime
+    ).toString();
+
+    var secondsInt = Number(seconds);
+    var temp = Math.floor(secondsInt);
+    var text = '';
+    if (temp / 3600 > 9) {
+      var x = temp % 3600;
+      var y = (temp - x) / 3600;
+      text = text + y + ':';
+      temp = x;
+    } else if (temp / 3600 > 0) {
+      var x = temp % 3600;
+      var y = (temp - x) / 3600;
+      text = text + '0' + y + ':';
+      temp = x;
+    }
+
+    if (temp / 60 > 9) {
+      var x = temp % 60;
+      var y = (temp - x) / 60;
+      text = text + y + ':';
+      temp = x;
+    } else if (temp / 60 > 0) {
+      var x = temp % 60;
+      var y = (temp - x) / 60;
+      text = text + '0' + y + ':';
+      temp = x;
+    } else {
+      text += '00:';
+    }
+
+    if (secondsInt % 60 > 9) {
+      text += Math.ceil(secondsInt % 60);
+    } else {
+      text += '0' + Math.ceil(secondsInt % 60);
+    }
+
+    (document.getElementById('inputIdTime') as HTMLInputElement).value = text;
+  }
+
+  changeAddPlaylistState() {
+    this.videoDetailService.addPlaylistState = !this.videoDetailService
+      .addPlaylistState;
+    window.scrollTo(0, 0);
   }
 }

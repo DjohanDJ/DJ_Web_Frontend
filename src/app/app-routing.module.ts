@@ -11,11 +11,12 @@ import { SubscriptionComponent } from './content/subscription/subscription.compo
 import { PremiumMembershipComponent } from './content/premium-membership/premium-membership.component';
 import { CategoryComponent } from './content/category/category.component';
 import { SendingComponent } from './content/watch/sending/sending.component';
+import { PlaylistComponent } from './content/playlist/playlist.component';
 
 const routes: Routes = [
   { path: '', component: HomeComponent },
   { path: 'trending', component: TrendingComponent },
-  { path: 'watch/:id', component: WatchComponent },
+  { path: 'watch/:id/:pid', component: WatchComponent },
   { path: 'results', component: ResultsComponent },
   { path: 'restrictioning', component: RestrictioningComponent },
   { path: 'channel/:id', component: ChannelComponent },
@@ -24,6 +25,7 @@ const routes: Routes = [
   { path: 'premium-membership', component: PremiumMembershipComponent },
   { path: 'category', component: CategoryComponent },
   { path: 'sending/:id', component: SendingComponent },
+  { path: 'playlist/:id', component: PlaylistComponent },
 ];
 
 @NgModule({

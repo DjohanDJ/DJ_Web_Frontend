@@ -12,26 +12,34 @@
       alt=""
     />
   </div>
-  <div class="search-box">
-    <input
-      type="text"
-      placeholder="Search"
-      #box
-      (keyup)="onTypeSearchBox(box.value)"
-    />
-    <button
-      *ngIf="booleanSearch"
-      [routerLink]="['/results']"
-      [queryParams]="{ search_query: searchQuery }"
-      class="search-button"
-      (click)="box.value = ''"
-    >
-      <img
-        class="search-image"
-        src="./../../assets/header-assets/search-outlined.svg"
-        alt=""
+  <div class="search-box-container">
+    <div class="search-box-item">
+      <input
+        id="search-box-id"
+        type="text"
+        placeholder="Search"
+        #box
+        (keyup)="onTypeSearchBox(box.value)"
       />
-    </button>
+      <button
+        *ngIf="booleanSearch"
+        [routerLink]="['/results']"
+        [queryParams]="{ search_query: searchQuery }"
+        class="search-button"
+        (click)="box.value = ''"
+      >
+        <img
+          class="search-image"
+          src="./../../assets/header-assets/search-outlined.svg"
+          alt=""
+        />
+      </button>
+    </div>
+    <div *ngIf="booleanSearch && checkFocus()" class="auto-complete-container">
+      <div class="auto-complete" *ngFor="let i of top5Videos">
+        {{ i.title }}
+      </div>
+    </div>
   </div>
   <div class="user-button-access">
     <button
@@ -321,6 +329,98 @@
       >
         <h6>America</h6>
       </button>
+    </div>
+  </div>
+</div>
+
+<div
+  class="{{
+    videoService.sharingState ? 'login-validation' : 'login-validation-none'
+  }}"
+>
+  <div class="validation-box">
+    <div class="title">
+      <h6>Share</h6>
+    </div>
+    <hr />
+    <button (click)="onClickShareTwitter()">
+      <img
+        class="image-twit"
+        src="../../assets/playlist-assets/twitter-circle-filled.svg"
+        alt=""
+      />
+    </button>
+    <div class="choice-location">
+      <div class="search-box-item-copy">
+        <input id="inputId" type="text" placeholder="Search" />
+        <button (click)="onClickSharing()" class="button-item">
+          <h6>Copy</h6>
+        </button>
+      </div>
+      <button (click)="closeShareModal()" class="sign-in-element">
+        <h6>CLOSE</h6>
+      </button>
+    </div>
+    <div *ngIf="videoService.checkBooleanTime" class="choice-locationD">
+      <button (click)="onClickWithTime()" class="sign-in-element">
+        <h6>
+          With Time
+        </h6>
+      </button>
+      <div class="search-box-item-time">
+        <input id="inputIdTime" type="text" placeholder="0:00" />
+      </div>
+    </div>
+  </div>
+</div>
+
+<div
+  class="{{
+    videoService.addPlaylistState ? 'login-validation' : 'login-validation-none'
+  }}"
+>
+  <div class="validation-boxA">
+    <div class="title">
+      <h6>Add To Playlist</h6>
+    </div>
+    <hr />
+    <div class="choice-location">
+      <div
+        *ngFor="let i of videoService.distinctPlaylists"
+        class="sign-in-element"
+      >
+        <button>
+          <h6>
+            {{ i.title }}
+          </h6>
+        </button>
+      </div>
+      <div
+        *ngFor="let i of videoService.nextDistinctPlaylists"
+        class="sign-in-element"
+      >
+        <button>
+          <h6>
+            {{ i.title }}
+          </h6>
+        </button>
+      </div>
+      <div class="choice-location">
+        <div class="search-box-item-new">
+          <input
+            type="text"
+            placeholder="Add New Playlist"
+            #box
+            (keyup)="onTypeSearchBox(box.value)"
+          />
+          <button class="button-item">
+            <h6>ADD</h6>
+          </button>
+        </div>
+        <button (click)="closeShareModal()" class="sign-in-element">
+          <h6>CLOSE</h6>
+        </button>
+      </div>
     </div>
   </div>
 </div>

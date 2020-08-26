@@ -1,7 +1,7 @@
 <div class="video-renderer-container">
   <button class="click-bait-button">
     <button
-      [routerLink]="['/watch/' + video.id]"
+      [routerLink]="['/watch/' + video.id + '/0']"
       (click)="getVideoDetail()"
       class="video-section"
     >
@@ -21,7 +21,8 @@
       </div>
     </div>
     <div class="video-description">
-      {{ channelName }} • {{ editViewers }} views • Uploaded {{ editDate }}
+      {{ channelName }} • {{ editViewers }} views • Uploaded {{ editDate }} •
+      {{ video.duration }}
     </div>
   </button>
 </div>

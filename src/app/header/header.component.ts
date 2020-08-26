@@ -6,6 +6,8 @@ import { Apollo } from 'apollo-angular';
 import gql from 'graphql-tag';
 import { VideoDetailService } from '../services-only/video-detail.service';
 import { LocationDetailService } from '../services-only/location-detail.service';
+import { join } from 'path';
+import { ActivatedRoute } from '@angular/router';
 
 export const searchUserByEmail = gql`
   query searchUser($searchEmail: String!) {
@@ -115,8 +117,9 @@ export class HeaderComponent implements OnInit {
     private authService: SocialAuthService,
     public userSession: UserSessionService,
     private apollo: Apollo,
-    private videoService: VideoDetailService,
-    private locationService: LocationDetailService
+    public videoService: VideoDetailService,
+    private locationService: LocationDetailService,
+    private route: ActivatedRoute
   ) {}
 
   @Input() display: boolean;
@@ -153,6 +156,9 @@ export class HeaderComponent implements OnInit {
     this.authService.signOut();
     this.dropdownDisplay = false;
     this.userSession.currentSubs = [];
+    this.videoService.userPlaylists = [];
+    this.videoService.distinctPlaylists = [];
+    this.videoService.nextDistinctPlaylists = [];
   }
 
   // Save the user
@@ -198,6 +204,7 @@ export class HeaderComponent implements OnInit {
 
   booleanSearch: boolean = false;
   searchQuery: string = '';
+  top5Videos: any = [];
   onTypeSearchBox(value: string) {
     this.searchQuery = value;
     if (this.searchQuery != '') {
@@ -205,6 +212,31 @@ export class HeaderComponent implements OnInit {
     } else {
       this.booleanSearch = false;
     }
+
+    var allVideos = this.videoService.getVideos();
+    this.top5Videos = [];
+    let j = 0;
+    for (let i = 0; i < allVideos.length; i++) {
+      if (
+        allVideos[i].title
+          .toLowerCase()
+          .includes(this.searchQuery.toLowerCase()) &&
+        j < 5
+      ) {
+        this.top5Videos.push(allVideos[i]);
+        j++;
+      } else if (j >= 5) {
+        break;
+      }
+    }
+  }
+
+  checkFocus() {
+    var searchBar = document.getElementById('search-box-id');
+    if (searchBar === document.activeElement) {
+      return true;
+    }
+    return false;
   }
 
   loginBoxDisplay: boolean = false;
@@ -238,7 +270,42 @@ export class HeaderComponent implements OnInit {
 
         this.getCurrentUsers();
         this.getSubscriber();
+        this.managePlaylists();
       });
+  }
+
+  managePlaylists() {
+    this.videoService.userPlaylists = [];
+    this.videoService.distinctPlaylists = [];
+    this.videoService.nextDistinctPlaylists = [];
+    var allPlaylist = this.videoService.playlists;
+    var userPlaylist = [];
+    for (let i = 0; i < allPlaylist.length; i++) {
+      if (allPlaylist[i].channel_id == this.userSession.getCurrentUserDB().id) {
+        userPlaylist.push(allPlaylist[i]);
+      }
+    }
+    this.videoService.userPlaylists = userPlaylist;
+    this.sortPlaylistByPrivacy();
+    const result = [];
+    const map = new Map();
+    for (const item of this.videoService.userPlaylists) {
+      if (!map.has(item.playlist_id)) {
+        map.set(item.playlist_id, true);
+        result.push(item);
+      }
+    }
+    if (result.length <= 5) {
+      this.videoService.distinctPlaylists = result;
+    } else {
+      for (let i = 0; i < result.length; i++) {
+        if (i < 5) {
+          this.videoService.distinctPlaylists.push(result[i]);
+        } else {
+          this.videoService.nextDistinctPlaylists.push(result[i]);
+        }
+      }
+    }
   }
 
   currentUserinDB: any;
@@ -455,6 +522,50 @@ export class HeaderComponent implements OnInit {
         } else return -1;
       }
     );
+  }
+
+  sortPlaylistByPrivacy() {
+    this.videoService.userPlaylists = [] = this.videoService.userPlaylists.sort(
+      (n1, n2) => {
+        if (n1.privacy > n2.privacy) {
+          return 1;
+        } else return -1;
+      }
+    );
+  }
+
+  closeShareModal() {
+    this.videoService.sharingState = false;
+    this.videoService.addPlaylistState = false;
+  }
+
+  onClickSharing() {
+    var copyText = document.getElementById('inputId') as HTMLInputElement;
+    copyText.select();
+    copyText.setSelectionRange(0, 99999);
+    document.execCommand('copy');
+  }
+
+  withTime: boolean = false;
+  onClickWithTime() {
+    this.withTime = !this.withTime;
+    if (this.withTime) {
+      (document.getElementById('inputId') as HTMLInputElement).value =
+        location.href +
+        '?time=' +
+        Math.ceil(
+          (document.getElementById('video') as HTMLVideoElement).currentTime
+        );
+    } else {
+      (document.getElementById('inputId') as HTMLInputElement).value =
+        location.href;
+    }
+  }
+
+  onClickShareTwitter() {
+    var text = (document.getElementById('inputId') as HTMLInputElement).value;
+    text = 'https://twitter.com/intent/tweet?text=' + text;
+    window.open(text, '_blank');
   }
 }
 

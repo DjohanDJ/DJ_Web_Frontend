@@ -30,6 +30,7 @@ import { CommentComponent } from './content/watch/comment/comment.component';
 import { SendingComponent } from './content/watch/sending/sending.component';
 import { UserRendererComponent } from './content/results/user-renderer/user-renderer.component';
 import { SubsciptionsComponent } from './navbar/subsciptions/subsciptions.component';
+import { PlaylistComponent } from './content/playlist/playlist.component';
 
 @NgModule({
   declarations: [
@@ -53,6 +54,7 @@ import { SubsciptionsComponent } from './navbar/subsciptions/subsciptions.compon
     SendingComponent,
     UserRendererComponent,
     SubsciptionsComponent,
+    PlaylistComponent,
   ],
   imports: [
     BrowserModule,

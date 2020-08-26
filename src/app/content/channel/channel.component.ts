@@ -83,20 +83,90 @@ export class ChannelComponent implements OnInit {
       if (entry[0].isIntersecting) {
         let main = document.querySelector('.parent');
         for (let i = 0; i < 3; i++) {
-          if (this.lastKey < this.filteredCurrentVideos.length) {
+          if (
+            this.lastKey < this.filteredCurrentVideos.length &&
+            this.videosState
+          ) {
             let div = document.createElement('div');
             let video = document.createElement('app-video-renderer');
             video.setAttribute('video', 'this.videos[this.lastKey]');
-            div.appendChild(video);
-            main.appendChild(div);
+            if (video != null && this.videosState) {
+              div.appendChild(video);
+            }
+            if (div != null && this.videosState) {
+              main.appendChild(div);
+            }
             this.lastKey++;
           }
         }
       }
     });
-    this.observer.observe(document.querySelector('.end-point'));
+    if (this.videosState) {
+      this.observer.observe(document.querySelector('.end-point'));
+    }
 
     this.getSubscriber();
+    this.getPlaylist();
+  }
+
+  userPlaylists: any = [];
+  showedPlaylist: any = [];
+  getPlaylist() {
+    var playlists = this.videosService.playlists;
+    this.userPlaylists = [];
+
+    if (
+      this.userSession.getCurrentUserDB() != null &&
+      this.userSession.getCurrentUserDB().id == this.currentUserParam
+    ) {
+      for (let i = 0; i < playlists.length; i++) {
+        if (playlists[i].channel_id == this.currentUserParam) {
+          this.userPlaylists.push(playlists[i]);
+        }
+      }
+    } else {
+      for (let i = 0; i < playlists.length; i++) {
+        if (
+          playlists[i].channel_id == this.currentUserParam &&
+          playlists[i].privacy == 'Public'
+        ) {
+          this.userPlaylists.push(playlists[i]);
+        }
+      }
+    }
+
+    const result = [];
+    const map = new Map();
+    for (const item of this.userPlaylists) {
+      if (!map.has(item.playlist_id)) {
+        map.set(item.playlist_id, true);
+        result.push(item);
+      }
+    }
+    this.userPlaylists = this.shuffle(result);
+
+    this.showedPlaylist = [];
+    for (let i = 0; i < this.userPlaylists.length; i++) {
+      if (i < 3) {
+        this.showedPlaylist.push(this.userPlaylists[i]);
+      }
+    }
+    console.log(this.showedPlaylist);
+    this.getCurrentVideo();
+    console.log(this.currentVideo);
+  }
+
+  currentVideo: any = [];
+  getCurrentVideo() {
+    this.currentVideo = [];
+    var allVideo = this.videosService.getVideos();
+    for (let i = 0; i < this.showedPlaylist.length; i++) {
+      for (let j = 0; j < allVideo.length; j++) {
+        if (this.showedPlaylist[i].video_id == allVideo[j].id) {
+          this.currentVideo.push(allVideo[j]);
+        }
+      }
+    }
   }
 
   userFromPickedChannel: any = null;

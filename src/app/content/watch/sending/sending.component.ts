@@ -12,7 +12,7 @@ export class SendingComponent implements OnInit {
   ngOnInit(): void {
     this.videoId = this.route.snapshot.params.id;
     setTimeout(() => {
-      this.router.navigateByUrl('/watch/' + this.videoId);
+      this.router.navigateByUrl('/watch/' + this.videoId + '/0');
     }, 1000);
   }
 

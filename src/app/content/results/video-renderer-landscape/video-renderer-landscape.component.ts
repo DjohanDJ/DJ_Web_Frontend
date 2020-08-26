@@ -32,6 +32,7 @@ export class VideoRendererLandscapeComponent implements OnInit {
     video_path: string;
     user_id: number;
     channel_name: string;
+    duration: string;
   };
   constructor(
     private videoDetailService: VideoDetailService,

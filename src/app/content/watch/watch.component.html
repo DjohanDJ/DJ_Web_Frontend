@@ -1,9 +1,15 @@
 <div class="main-container">
   <div class="left-container">
     <div class="video-player">
-      <video controls autoplay src="{{ selectedVideo.video_path }}"></video>
+      <video
+        (click)="hotkeys()"
+        id="video"
+        controls
+        autoplay
+        src="{{ selectedVideo.video_path }}"
+      ></video>
     </div>
-    <div class="video-detail-description">
+    <div (click)="deletekeys()" class="video-detail-description">
       <div class="title">
         <h6>{{ selectedVideo.title }}</h6>
       </div>
@@ -13,9 +19,46 @@
           {{ selectedVideo.view_count }} views
         </h6>
       </div>
+      <div class="complex-button">
+        <button
+          *ngIf="userSession.getCurrentUserDB() != null"
+          (click)="changeAddPlaylistState()"
+          class="button-item"
+        >
+          <h6>
+            ADD TO PLAYLIST
+          </h6>
+        </button>
+        <button (click)="changeSharingState()" class="button-item">
+          <h6>
+            SHARE
+          </h6>
+        </button>
+        <button (click)="nextPlayVideo()" class="button-item">
+          <h6>
+            NEXT
+          </h6>
+        </button>
+        <button
+          class="button-item"
+          style="background-color: rgba(2, 83, 2, 0.719);"
+        >
+          <h6>
+            LIKE
+          </h6>
+        </button>
+        <button
+          class="button-item"
+          style="background-color: rgba(117, 1, 1, 0.63);"
+        >
+          <h6>
+            DISLIKE
+          </h6>
+        </button>
+      </div>
     </div>
     <hr />
-    <div class="user-container">
+    <div (click)="deletekeys()" class="user-container">
       <div class="user-items">
         <button
           [routerLink]="[
@@ -59,7 +102,7 @@
         </button>
       </div>
     </div>
-    <div class="video-description">
+    <div (click)="deletekeys()" class="video-description">
       <h6>Detail Description</h6>
       <br />
       <h6>
@@ -68,6 +111,7 @@
     </div>
     <hr />
     <div
+      (click)="deletekeys()"
       class="video-comment {{ userSession.getCurrentUser() ? 'column' : '' }}"
     >
       <div class="tab-container">
@@ -127,7 +171,7 @@
       </div>
     </div>
     <hr />
-    <div class="public-comments">
+    <div (click)="deletekeys()" class="public-comments">
       <h6 *ngIf="commentState">
         Public Comments
       </h6>
@@ -169,8 +213,30 @@
       <div class="end-point"></div>
     </div>
   </div>
-  <div class="separator"></div>
-  <div class="related-video">
+  <div (click)="deletekeys()" class="separator"></div>
+  <div (click)="deletekeys()" class="related-video">
+    <div class="current-button">
+      <button
+        *ngIf="videoDetailService.autoPlayState"
+        (click)="changeAutoPlayState()"
+        class="button-item-other"
+        style="background-color: rgba(2, 83, 2, 0.719);"
+      >
+        <h6>
+          AUTOPLAY: ON
+        </h6>
+      </button>
+      <button
+        *ngIf="!videoDetailService.autoPlayState"
+        (click)="changeAutoPlayState()"
+        class="button-item-other"
+        style="background-color: rgba(117, 1, 1, 0.63);"
+      >
+        <h6>
+          AUTOPLAY: OFF
+        </h6>
+      </button>
+    </div>
     <div *ngFor="let i of relatedVideos; let l = index">
       <app-video-renderer
         *ngIf="l < lastKeyRelated"

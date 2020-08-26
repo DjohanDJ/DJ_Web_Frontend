@@ -40,4 +40,37 @@ export class VideoDetailService {
   getCurrentChildComments() {
     return this.currentChildComments;
   }
+
+  playlists: any = [];
+  userPlaylists: any = [];
+  distinctPlaylists: any = [];
+  nextDistinctPlaylists: any = [];
+
+  privacyState: boolean = false;
+
+  parsedVideoQueue: any = [];
+
+  currentNextVideo: any = null;
+
+  currentAllVideos: any = [];
+
+  singlePlaylistDetail: {
+    playlist_id: number;
+    video_id: number;
+    channel_id: number;
+    title: string;
+    description: string;
+    thumbnail: string;
+    update_date: string;
+    view_count: string;
+    privacy: string;
+  };
+
+  // dropdown state share
+  sharingState: boolean = false;
+  addPlaylistState: boolean = false;
+
+  checkBooleanTime: boolean = false;
+
+  autoPlayState: boolean = false;
 }

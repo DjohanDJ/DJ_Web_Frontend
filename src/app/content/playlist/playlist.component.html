@@ -1,0 +1,249 @@
+<div class="content">
+  <div class="left-container">
+    <div class="playlist-container">
+      <div class="thumbnail">
+        <img
+          class="playlist-image"
+          src="{{ currentVideo ? currentVideo.image_path : '' }}"
+          alt=""
+        />
+        <div class="complex-button">
+          <button
+            [routerLink]="[
+              '/watch/' +
+                videoService.currentAllVideos[0].id +
+                '/' +
+                playlist.playlist_id
+            ]"
+            class="button-item"
+          >
+            <h6>
+              PLAY ALL
+            </h6>
+          </button>
+          <button
+            [routerLink]="[
+              '/watch/' +
+                videoService.currentAllVideos[0].id +
+                '/' +
+                playlist.playlist_id
+            ]"
+            class="button-item"
+            (click)="randomVideoForService()"
+          >
+            <h6>
+              PLAY RANDOM ALL
+            </h6>
+          </button>
+        </div>
+      </div>
+      <div class="title-panel">
+        <h6 *ngIf="!inputState">
+          {{ playlist.title }}
+        </h6>
+        <button *ngIf="!inputState" (click)="changeInputState()">
+          <img
+            class="icon-image"
+            src="../../../assets/playlist-assets/edit-solid.svg"
+            alt=""
+          />
+        </button>
+        <div *ngIf="inputState" class="order-form">
+          <input
+            id="fullname"
+            type="text"
+            autocomplete="off"
+            required
+            #box
+            (keyup)="onTypeSearchBox(box.value)"
+          />
+          <label for="name" class="label-name">
+            <span class="name-content"></span>
+          </label>
+        </div>
+        <button
+          (click)="onClickUpdateTitle()"
+          *ngIf="booleanSearch && inputState"
+          class="send-button"
+        >
+          <div
+            class="send-button-image"
+            [inlineSVG]="'../../../assets/video-detail-assets/send.svg'"
+          ></div>
+        </button>
+      </div>
+      <div class="video-count">
+        <h6>
+          {{ videoCount }} videos • {{ editViewers }} views • Updated
+          {{ editDate }}
+        </h6>
+      </div>
+      <div class="tab-container">
+        <button
+          (click)="changePrivacy()"
+          class="tab-item {{
+            videoService.privacyState ? 'tab-item-focus' : ''
+          }}"
+        >
+          <h6>Private</h6>
+        </button>
+        <button
+          (click)="changePublic()"
+          class="tab-item {{
+            !videoService.privacyState ? 'tab-item-focus' : ''
+          }}"
+        >
+          <h6>Public</h6>
+        </button>
+      </div>
+      <div class="tab-container">
+        <button
+          (click)="changeAddedState()"
+          class="tab-item {{ dateAddedState ? 'tab-item-focus' : '' }}"
+        >
+          <h6>Date Added</h6>
+        </button>
+        <button
+          (click)="changePublishState()"
+          class="tab-item {{ datePublishedState ? 'tab-item-focus' : '' }}"
+        >
+          <h6>Date Published</h6>
+        </button>
+        <button
+          (click)="changePopularityState()"
+          class="tab-item {{ popularityState ? 'tab-item-focus' : '' }}"
+        >
+          <h6>Popularity</h6>
+        </button>
+      </div>
+      <div class="description">
+        <h6 *ngIf="!inputStateDesc">{{ playlist.description }}</h6>
+        <button *ngIf="!inputStateDesc" (click)="changeInputStateDesc()">
+          <img
+            class="icon-image"
+            src="../../../assets/playlist-assets/edit-solid.svg"
+            alt=""
+          />
+        </button>
+        <div *ngIf="inputStateDesc" class="order-form">
+          <input
+            id="fullname"
+            type="text"
+            autocomplete="off"
+            required
+            #box
+            (keyup)="onTypeSearchBoxDesc(box.value)"
+          />
+          <label for="name" class="label-name">
+            <span class="name-content"></span>
+          </label>
+        </div>
+        <button
+          (click)="onClickUpdateDesc()"
+          *ngIf="booleanSearchDesc && inputStateDesc"
+          class="send-button"
+        >
+          <div
+            class="send-button-image"
+            [inlineSVG]="'../../../assets/video-detail-assets/send.svg'"
+          ></div>
+        </button>
+      </div>
+      <div class="complex-button">
+        <button
+          [routerLink]="['/']"
+          (click)="onClickDeleteVideos()"
+          class="button-item"
+        >
+          <h6>
+            DELETE ALL VIDEOS
+          </h6>
+        </button>
+        <button (click)="changeSharingState()" class="button-item">
+          <h6>
+            SHARE
+          </h6>
+        </button>
+      </div>
+    </div>
+    <hr />
+    <div class="user-container-parent">
+      <button
+        [routerLink]="['/channel/' + playlist.channel_id]"
+        class="user-container"
+      >
+        <img
+          class="user-image"
+          src="{{ selectedUser ? selectedUser.user_image : '' }}"
+          alt=""
+        />
+        <h6>{{ selectedUser ? selectedUser.username : "" }}</h6>
+      </button>
+      <div class="subscibe-panel">
+        <button
+          *ngIf="
+            (userSession.getCurrentUserDB() ? true : false) &&
+            (userSession.getCurrentUserDB().id !=
+            (selectedUser ? selectedUser.id : '')
+              ? true
+              : false)
+          "
+          (click)="changeSubscribeState()"
+          class="subscribe-button {{
+            checkSubsRelation() ? 'subscribed-button' : ''
+          }}"
+        >
+          <h6 *ngIf="!checkSubsRelation()">SUBSCRIBE</h6>
+          <h6 *ngIf="checkSubsRelation()">SUBSCRIBED</h6>
+        </button>
+        <button class="bell-button" *ngIf="checkSubsRelation()">
+          <img src="../../../assets/header-assets/bxs-bell.svg" alt="" />
+        </button>
+      </div>
+    </div>
+  </div>
+  <div class="ver-line"></div>
+  <div class="right-container">
+    <div *ngFor="let i of videoService.currentAllVideos; let j = index">
+      <app-video-renderer
+        *ngIf="j < lastKey"
+        [video]="i"
+        [videos]="videoService.currentAllVideos"
+      ></app-video-renderer>
+      <button
+        (click)="openDropdown(j)"
+        *ngIf="j < lastKey"
+        class="button-item-action"
+      >
+        <h6>
+          Action
+        </h6>
+      </button>
+      <div
+        class="{{
+          !dropdownDisplay[j] ? 'user-dropdown-none' : ''
+        }}  user-dropdown-menu"
+      >
+        <button (click)="moveToTop(i)" class="element-dropdown-menu">
+          <h6>Move to top</h6>
+        </button>
+        <button (click)="moveToBottom(i)" class="element-dropdown-menu">
+          <h6>Move to bottom</h6>
+        </button>
+        <button (click)="moveUp(i)" class="element-dropdown-menu">
+          <h6>Move up</h6>
+        </button>
+        <button (click)="moveDown(i)" class="element-dropdown-menu">
+          <h6>Move down</h6>
+        </button>
+        <button
+          (click)="removeVideoFromPlaylist(i)"
+          class="element-dropdown-menu"
+        >
+          <h6>Remove From {{ playlist.title }}</h6>
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="end-point"></div>

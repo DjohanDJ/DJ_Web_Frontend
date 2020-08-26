@@ -3,6 +3,7 @@ import { Apollo } from 'apollo-angular';
 import gql from 'graphql-tag';
 import { VideoDetailService } from 'src/app/services-only/video-detail.service';
 import { LocationDetailService } from 'src/app/services-only/location-detail.service';
+import { Router } from '@angular/router';
 
 export const getVideoQuery = gql`
   query searchHomeVideos($isKid: Boolean!) {
@@ -18,6 +19,23 @@ export const getVideoQuery = gql`
       restriction
       category_id
       location
+      duration
+    }
+  }
+`;
+
+export const getPlaylistQuery = gql`
+  query getPlaylists {
+    playlists {
+      playlist_id
+      video_id
+      description
+      channel_id
+      title
+      thumbnail
+      update_date
+      view_count
+      privacy
     }
   }
 `;
@@ -31,8 +49,13 @@ export class HomeComponent implements OnInit {
   constructor(
     private apollo: Apollo,
     private videoService: VideoDetailService,
-    private locationService: LocationDetailService
+    private locationService: LocationDetailService,
+    private route: Router
   ) {}
+
+  clickPlaylist() {
+    this.route.navigateByUrl('/playlist/6');
+  }
 
   ngOnInit(): void {
     this.lastKey = 12;
@@ -69,6 +92,14 @@ export class HomeComponent implements OnInit {
         this.shuffledVideos = this.shuffle(this.shuffledVideos);
         this.checkLocation();
         // console.log(this.videos);
+      });
+
+    this.apollo
+      .watchQuery<any>({
+        query: getPlaylistQuery,
+      })
+      .valueChanges.subscribe((result) => {
+        this.videoService.playlists = result.data.playlists;
       });
   }
 

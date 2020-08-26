@@ -1,5 +1,5 @@
 <div class="home-section">
-  <h4 class="main-static-text">Recommended</h4>
+  <h4 class="main-static-text" (click)="clickPlaylist()">Recommended</h4>
   <div class="video-content">
     <div *ngFor="let i of videosByLocation; let j = index">
       <app-video-renderer
