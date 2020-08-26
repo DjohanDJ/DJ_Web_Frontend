@@ -151,12 +151,12 @@ export class ChannelComponent implements OnInit {
         this.showedPlaylist.push(this.userPlaylists[i]);
       }
     }
-    console.log(this.showedPlaylist);
     this.getCurrentVideo();
-    console.log(this.currentVideo);
+    this.getVideoCount();
   }
 
   currentVideo: any = [];
+  videoCount: any = [];
   getCurrentVideo() {
     this.currentVideo = [];
     var allVideo = this.videosService.getVideos();
@@ -164,6 +164,21 @@ export class ChannelComponent implements OnInit {
       for (let j = 0; j < allVideo.length; j++) {
         if (this.showedPlaylist[i].video_id == allVideo[j].id) {
           this.currentVideo.push(allVideo[j]);
+        }
+      }
+    }
+  }
+
+  getVideoCount() {
+    this.videoCount = [];
+    for (let j = 0; j < this.showedPlaylist.length; j++) {
+      this.videoCount[j] = 0;
+    }
+    var allPlaylist = this.videosService.playlists;
+    for (let i = 0; i < allPlaylist.length; i++) {
+      for (let j = 0; j < this.showedPlaylist.length; j++) {
+        if (allPlaylist[i].playlist_id == this.showedPlaylist[j].playlist_id) {
+          this.videoCount[j]++;
         }
       }
     }

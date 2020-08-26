@@ -31,6 +31,8 @@ import { SendingComponent } from './content/watch/sending/sending.component';
 import { UserRendererComponent } from './content/results/user-renderer/user-renderer.component';
 import { SubsciptionsComponent } from './navbar/subsciptions/subsciptions.component';
 import { PlaylistComponent } from './content/playlist/playlist.component';
+import { PlaylistRendererComponent } from './content/playlist-renderer/playlist-renderer.component';
+import { PlaylistRendererLandscapeComponent } from './content/playlist-renderer-landscape/playlist-renderer-landscape.component';
 
 @NgModule({
   declarations: [
@@ -55,6 +57,8 @@ import { PlaylistComponent } from './content/playlist/playlist.component';
     UserRendererComponent,
     SubsciptionsComponent,
     PlaylistComponent,
+    PlaylistRendererComponent,
+    PlaylistRendererLandscapeComponent,
   ],
   imports: [
     BrowserModule,

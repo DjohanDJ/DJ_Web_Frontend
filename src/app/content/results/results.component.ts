@@ -42,7 +42,8 @@ export class ResultsComponent implements OnInit {
   constructor(
     private apollo: Apollo,
     private route: ActivatedRoute,
-    private router: Router
+    private router: Router,
+    private videoService: VideoDetailService
   ) {
     this.router.routeReuseStrategy.shouldReuseRoute = function () {
       return false;
@@ -84,6 +85,7 @@ export class ResultsComponent implements OnInit {
       .valueChanges.subscribe((result) => {
         this.users = result.data.users;
         this.checkContainUser();
+        this.checkContainPlaylist();
       });
   }
   searchQuery: string;
@@ -206,4 +208,49 @@ export class ResultsComponent implements OnInit {
 
   filteredUsers: any = [];
   users: any;
+
+  filteredPlaylists: any = [];
+
+  checkContainPlaylist() {
+    this.filteredPlaylists = [];
+    var allPlaylist = this.videoService.playlists;
+    const result = [];
+    const map = new Map();
+    for (const item of allPlaylist) {
+      if (!map.has(item.playlist_id)) {
+        map.set(item.playlist_id, true);
+        result.push(item);
+      }
+    }
+
+    var publicVideos = [];
+    for (let i = 0; i < result.length; i++) {
+      if (result[i].privacy === 'Public') {
+        publicVideos.push(result[i]);
+      }
+    }
+    for (let i = 0; i < publicVideos.length; i++) {
+      if (
+        publicVideos[i].title
+          .toLowerCase()
+          .includes(this.searchQuery.toLowerCase())
+      ) {
+        this.filteredPlaylists.push(publicVideos[i]);
+      }
+    }
+    this.getCurrentVideo();
+  }
+
+  currentVideo: any = [];
+  getCurrentVideo() {
+    this.currentVideo = [];
+    var allVideo = this.videoService.getVideos();
+    for (let i = 0; i < this.filteredPlaylists.length; i++) {
+      for (let j = 0; j < allVideo.length; j++) {
+        if (this.filteredPlaylists[i].video_id == allVideo[j].id) {
+          this.currentVideo.push(allVideo[j]);
+        }
+      }
+    }
+  }
 }

@@ -114,7 +114,19 @@
             <h6>See All Playlist</h6>
           </button>
         </div>
-        <div class="first-content"></div>
+        <div class="first-content">
+          <div
+            *ngFor="let i of showedPlaylist; let j = index"
+            class="second-section"
+          >
+            <app-playlist-renderer
+              *ngIf="j < 3"
+              [playlist]="i"
+              [video]="currentVideo[j]"
+              [videoCount]="videoCount[j]"
+            ></app-playlist-renderer>
+          </div>
+        </div>
       </div>
     </div>
     <div *ngIf="videosState" class="videos">
@@ -162,7 +174,11 @@
         *ngFor="let i of showedPlaylist; let j = index"
         class="second-section"
       >
-        {{ i.title }}{{ currentVideo[j].image_path }}
+        <app-playlist-renderer
+          [playlist]="i"
+          [video]="currentVideo[j]"
+          [videoCount]="videoCount[j]"
+        ></app-playlist-renderer>
       </div>
     </div>
     <div *ngIf="communityState" class="community">

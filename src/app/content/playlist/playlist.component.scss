@@ -1,5 +1,6 @@
 .content {
   display: flex;
+  min-height: calc(100vh - 59px);
 }
 
 .ver-line {
@@ -147,8 +148,8 @@
   box-shadow: 0 1px 4px rgba(0, 0, 0, 0.3);
   display: flex;
   flex-direction: column;
-  top: 300px;
-  left: 10px;
+  top: 35px;
+  left: 30px;
   padding: 10px;
   opacity: 1;
   z-index: 9000;

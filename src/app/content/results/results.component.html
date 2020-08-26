@@ -51,7 +51,7 @@
     >
     </app-user-renderer>
   </div>
-  <div *ngIf="!channelState" class="video-content">
+  <div *ngIf="!channelState && !playlistState" class="video-content">
     <app-video-renderer-landscape
       *ngFor="let i of filteredVideos"
       [video]="i"
@@ -65,5 +65,12 @@
       [users]="filteredUsers"
     >
     </app-user-renderer>
+  </div>
+  <div *ngIf="allState || playlistState" class="video-content">
+    <app-playlist-renderer-landscape
+      *ngFor="let i of filteredPlaylists; let j = index"
+      [playlist]="i"
+      [video]="currentVideo[j]"
+    ></app-playlist-renderer-landscape>
   </div>
 </div>
