@@ -36,6 +36,26 @@
       <div class="line-description">
         <h6>{{ editDesc }}</h6>
       </div>
+      <div class="action-button">
+        <button
+          *ngIf="
+            (locationNow.toLowerCase().includes('playlist') == true
+              ? false
+              : true) && userSession.getCurrentUserDB() != null
+          "
+          (click)="openDropdown()"
+          class="button-item-action"
+        >
+          <h6>Action</h6>
+        </button>
+      </div>
     </div>
+  </button>
+</div>
+<div
+  class="{{ !dropdownDisplay ? 'user-dropdown-none' : '' }}  user-dropdown-menu"
+>
+  <button (click)="openPlaylistModal()" class="element-dropdown-menu">
+    <h6>Add To Playlist</h6>
   </button>
 </div>

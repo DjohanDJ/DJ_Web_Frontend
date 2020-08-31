@@ -84,9 +84,7 @@
           src="./../../assets/header-assets/profile.svg"
           alt=""
         />
-        <h6>
-          SIGN IN
-        </h6>
+        <h6>SIGN IN</h6>
       </div>
     </button>
     <button
@@ -363,9 +361,7 @@
     </div>
     <div *ngIf="videoService.checkBooleanTime" class="choice-locationD">
       <button (click)="onClickWithTime()" class="sign-in-element">
-        <h6>
-          With Time
-        </h6>
+        <h6>With Time</h6>
       </button>
       <div class="search-box-item-time">
         <input id="inputIdTime" type="text" placeholder="0:00" />
@@ -389,7 +385,7 @@
         *ngFor="let i of videoService.distinctPlaylists"
         class="sign-in-element"
       >
-        <button>
+        <button (click)="addExistPlaylist(i)">
           <h6>
             {{ i.title }}
           </h6>
@@ -399,7 +395,7 @@
         *ngFor="let i of videoService.nextDistinctPlaylists"
         class="sign-in-element"
       >
-        <button>
+        <button (click)="addExistPlaylist(i)">
           <h6>
             {{ i.title }}
           </h6>
@@ -408,16 +404,24 @@
       <div class="choice-location">
         <div class="search-box-item-new">
           <input
+            style="margin-top: 20px; margin-bottom: 20px"
             type="text"
             placeholder="Add New Playlist"
-            #box
-            (keyup)="onTypeSearchBox(box.value)"
+            #box2
+            (keyup)="onTypeSearchBoxTitle(box2.value)"
           />
-          <button class="button-item">
+          <button
+            *ngIf="booleanAddNew"
+            (click)="addNewPlaylist(); box2.value = ''"
+            class="button-item"
+          >
             <h6>ADD</h6>
           </button>
         </div>
-        <button (click)="closeShareModal()" class="sign-in-element">
+        <button
+          (click)="box2.value = ''; closeShareModal()"
+          class="sign-in-element"
+        >
           <h6>CLOSE</h6>
         </button>
       </div>

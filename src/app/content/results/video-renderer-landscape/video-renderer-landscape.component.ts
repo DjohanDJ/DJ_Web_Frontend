@@ -2,6 +2,7 @@ import { Component, OnInit, Input } from '@angular/core';
 import { VideoDetailService } from 'src/app/services-only/video-detail.service';
 import { Apollo } from 'apollo-angular';
 import gql from 'graphql-tag';
+import { UserSessionService } from 'src/app/services-only/user-session.service';
 
 export const searchUserByID = gql`
   query searchUserByID($userId: Int!) {
@@ -36,12 +37,15 @@ export class VideoRendererLandscapeComponent implements OnInit {
   };
   constructor(
     private videoDetailService: VideoDetailService,
-    private apollo: Apollo
+    private apollo: Apollo,
+    public userSession: UserSessionService
   ) {}
 
   userFromPickedVideo: any;
 
+  locationNow: any;
   ngOnInit(): void {
+    this.locationNow = location.href;
     this.searchForUserByID();
     this.temp = this.video.view_count;
     this.changeViewFormat();
@@ -164,7 +168,7 @@ export class VideoRendererLandscapeComponent implements OnInit {
     var differentDate = Math.abs(
       Math.floor((videoDate.getTime() - now.getTime()) / (1000 * 3600 * 24))
     );
-    if (differentDate < 1) {
+    if (differentDate <= 1) {
       this.editDate = 'Today';
     } else if (differentDate <= 6) {
       this.editDate = differentDate + ' days ago';
@@ -175,5 +179,24 @@ export class VideoRendererLandscapeComponent implements OnInit {
     } else {
       this.editDate = Math.abs(Math.floor(differentDate / 365)) + ' years ago';
     }
+  }
+
+  dropdownDisplay: boolean = false;
+
+  openDropdown() {
+    this.dropdownDisplay = !this.dropdownDisplay;
+  }
+
+  openPlaylistModal() {
+    this.dropdownDisplay = !this.dropdownDisplay;
+    // console.log(this.video.id);
+    this.videoDetailService.choosenVideoForPlaylist = this.video.id;
+    this.changeAddPlaylistState();
+  }
+
+  changeAddPlaylistState() {
+    this.videoDetailService.addPlaylistState = !this.videoDetailService
+      .addPlaylistState;
+    window.scrollTo(0, 0);
   }
 }

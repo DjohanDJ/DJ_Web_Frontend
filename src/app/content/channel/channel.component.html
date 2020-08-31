@@ -90,7 +90,7 @@
           ></app-video-renderer>
         </div>
       </div>
-      <hr />
+      <hr style="margin-top: 10px" />
       <div class="second-section">
         <div class="sub-header">
           <h6 class="title">5 Random Videos</h6>
@@ -106,7 +106,7 @@
           ></app-video-renderer>
         </div>
       </div>
-      <hr />
+      <hr style="margin-top: 10px" />
       <div class="third-section">
         <div class="sub-header">
           <h6 class="title">3 Random Playlist</h6>
@@ -181,12 +181,8 @@
         ></app-playlist-renderer>
       </div>
     </div>
-    <div *ngIf="communityState" class="community">
-      this is community
-    </div>
-    <div *ngIf="aboutState" class="about">
-      this is about
-    </div>
+    <div *ngIf="communityState" class="community">this is community</div>
+    <div *ngIf="aboutState" class="about">this is about</div>
   </div>
 </div>
 <div class="end-point"></div>

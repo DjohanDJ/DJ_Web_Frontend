@@ -73,4 +73,10 @@ export class VideoDetailService {
   checkBooleanTime: boolean = false;
 
   autoPlayState: boolean = false;
+
+  // for insert to playlist
+
+  choosenVideoForPlaylist: any = null;
+
+  savedPlaylists: any = [];
 }

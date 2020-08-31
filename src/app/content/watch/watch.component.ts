@@ -209,6 +209,7 @@ export class WatchComponent implements OnInit {
       if (this.playlistParamId == 0) {
         this.getRelatedVideos();
       } else {
+        this.getRelatedVideos();
         this.getQueuePlaylist();
       }
       this.getSubscriber();
@@ -428,8 +429,10 @@ export class WatchComponent implements OnInit {
   getQueuePlaylist() {
     this.currentAllVideos = [];
     this.currentAllVideos = this.videoDetailService.parsedVideoQueue;
-    this.relatedVideos = this.currentAllVideos;
+    this.playlistVideos = this.currentAllVideos;
   }
+
+  playlistVideos = [];
 
   // subscribing
 
@@ -662,16 +665,16 @@ export class WatchComponent implements OnInit {
       );
     } else {
       let index = 0;
-      for (let i = 0; i < this.relatedVideos.length; i++) {
-        if (this.relatedVideos[i].id == this.videoId) {
+      for (let i = 0; i < this.playlistVideos.length; i++) {
+        if (this.playlistVideos[i].id == this.videoId) {
           index = i;
           break;
         }
       }
-      if (index != this.relatedVideos.length - 1) {
+      if (index != this.playlistVideos.length - 1) {
         this.router.navigateByUrl(
           '/watch/' +
-            this.relatedVideos[index + 1].id +
+            this.playlistVideos[index + 1].id +
             '/' +
             this.playlistParamId
         );

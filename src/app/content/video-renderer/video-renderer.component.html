@@ -26,3 +26,20 @@
     </div>
   </button>
 </div>
+<button
+  *ngIf="
+    (locationNow.toLowerCase().includes('playlist') == true ? false : true) &&
+    userSession.getCurrentUserDB() != null
+  "
+  (click)="openDropdown()"
+  class="button-item-action"
+>
+  <h6>Action</h6>
+</button>
+<div
+  class="{{ !dropdownDisplay ? 'user-dropdown-none' : '' }}  user-dropdown-menu"
+>
+  <button (click)="openPlaylistModal()" class="element-dropdown-menu">
+    <h6>Add To Playlist</h6>
+  </button>
+</div>

@@ -17,9 +17,7 @@
             ]"
             class="button-item"
           >
-            <h6>
-              PLAY ALL
-            </h6>
+            <h6>PLAY ALL</h6>
           </button>
           <button
             [routerLink]="[
@@ -31,9 +29,7 @@
             class="button-item"
             (click)="randomVideoForService()"
           >
-            <h6>
-              PLAY RANDOM ALL
-            </h6>
+            <h6>PLAY RANDOM ALL</h6>
           </button>
         </div>
       </div>
@@ -41,7 +37,16 @@
         <h6 *ngIf="!inputState">
           {{ playlist.title }}
         </h6>
-        <button *ngIf="!inputState" (click)="changeInputState()">
+        <button
+          *ngIf="
+            !inputState &&
+            playlist.channel_id ==
+              (userSession.getCurrentUserDB()
+                ? userSession.getCurrentUserDB().id
+                : '')
+          "
+          (click)="changeInputState()"
+        >
           <img
             class="icon-image"
             src="../../../assets/playlist-assets/edit-solid.svg"
@@ -78,7 +83,15 @@
           {{ editDate }}
         </h6>
       </div>
-      <div class="tab-container">
+      <div
+        class="tab-container"
+        *ngIf="
+          playlist.channel_id ==
+          (userSession.getCurrentUserDB()
+            ? userSession.getCurrentUserDB().id
+            : '')
+        "
+      >
         <button
           (click)="changePrivacy()"
           class="tab-item {{
@@ -118,7 +131,16 @@
       </div>
       <div class="description">
         <h6 *ngIf="!inputStateDesc">{{ playlist.description }}</h6>
-        <button *ngIf="!inputStateDesc" (click)="changeInputStateDesc()">
+        <button
+          *ngIf="
+            !inputStateDesc &&
+            playlist.channel_id ==
+              (userSession.getCurrentUserDB()
+                ? userSession.getCurrentUserDB().id
+                : '')
+          "
+          (click)="changeInputStateDesc()"
+        >
           <img
             class="icon-image"
             src="../../../assets/playlist-assets/edit-solid.svg"
@@ -151,18 +173,41 @@
       </div>
       <div class="complex-button">
         <button
+          *ngIf="
+            playlist.channel_id ==
+            (userSession.getCurrentUserDB()
+              ? userSession.getCurrentUserDB().id
+              : '')
+          "
           [routerLink]="['/']"
           (click)="onClickDeleteVideos()"
           class="button-item"
         >
-          <h6>
-            DELETE ALL VIDEOS
-          </h6>
+          <h6>DELETE PLAYLIST</h6>
         </button>
         <button (click)="changeSharingState()" class="button-item">
-          <h6>
-            SHARE
-          </h6>
+          <h6>SHARE</h6>
+        </button>
+        <button
+          *ngIf="
+            playlist.channel_id !=
+              (userSession.getCurrentUserDB()
+                ? userSession.getCurrentUserDB().id
+                : '') &&
+            userSession.getCurrentUserDB() != null &&
+            !checkSavePlaylist()
+          "
+          class="button-item"
+          (click)="saveCurrentPlaylist()"
+        >
+          <h6>SAVE</h6>
+        </button>
+        <button
+          *ngIf="userSession.getCurrentUserDB() != null && checkSavePlaylist()"
+          class="button-item-save"
+          (click)="deleteCurrentSavedPlaylist()"
+        >
+          <h6>SAVED</h6>
         </button>
       </div>
     </div>
@@ -215,15 +260,20 @@
         *ngIf="j < lastKey"
         class="button-item-action"
       >
-        <h6>
-          Action
-        </h6>
+        <h6>Action</h6>
       </button>
       <div
         class="{{
           !dropdownDisplay[j] ? 'user-dropdown-none' : ''
         }}  user-dropdown-menu"
       >
+        <button
+          *ngIf="userSession.getCurrentUserDB() != null"
+          (click)="openPlaylistModal(i)"
+          class="element-dropdown-menu"
+        >
+          <h6>Add To Playlist</h6>
+        </button>
         <button (click)="moveToTop(i)" class="element-dropdown-menu">
           <h6>Move to top</h6>
         </button>

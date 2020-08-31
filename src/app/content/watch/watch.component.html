@@ -25,35 +25,25 @@
           (click)="changeAddPlaylistState()"
           class="button-item"
         >
-          <h6>
-            ADD TO PLAYLIST
-          </h6>
+          <h6>ADD TO PLAYLIST</h6>
         </button>
         <button (click)="changeSharingState()" class="button-item">
-          <h6>
-            SHARE
-          </h6>
+          <h6>SHARE</h6>
         </button>
         <button (click)="nextPlayVideo()" class="button-item">
-          <h6>
-            NEXT
-          </h6>
+          <h6>NEXT</h6>
         </button>
         <button
           class="button-item"
-          style="background-color: rgba(2, 83, 2, 0.719);"
+          style="background-color: rgba(2, 83, 2, 0.719)"
         >
-          <h6>
-            LIKE
-          </h6>
+          <h6>LIKE</h6>
         </button>
         <button
           class="button-item"
-          style="background-color: rgba(117, 1, 1, 0.63);"
+          style="background-color: rgba(117, 1, 1, 0.63)"
         >
-          <h6>
-            DISLIKE
-          </h6>
+          <h6>DISLIKE</h6>
         </button>
       </div>
     </div>
@@ -172,12 +162,8 @@
     </div>
     <hr />
     <div (click)="deletekeys()" class="public-comments">
-      <h6 *ngIf="commentState">
-        Public Comments
-      </h6>
-      <h6 *ngIf="!commentState">
-        There's no comment yet.
-      </h6>
+      <h6 *ngIf="commentState">Public Comments</h6>
+      <h6 *ngIf="!commentState">There's no comment yet.</h6>
       <h6 *ngIf="commentState">{{ commentCount }} Comments</h6>
       <div class="parent">
         <div class="comments" *ngFor="let i of currentComments; let k = index">
@@ -220,22 +206,32 @@
         *ngIf="videoDetailService.autoPlayState"
         (click)="changeAutoPlayState()"
         class="button-item-other"
-        style="background-color: rgba(2, 83, 2, 0.719);"
+        style="background-color: rgba(2, 83, 2, 0.719)"
       >
-        <h6>
-          AUTOPLAY: ON
-        </h6>
+        <h6>AUTOPLAY: ON</h6>
       </button>
       <button
         *ngIf="!videoDetailService.autoPlayState"
         (click)="changeAutoPlayState()"
         class="button-item-other"
-        style="background-color: rgba(117, 1, 1, 0.63);"
+        style="background-color: rgba(117, 1, 1, 0.63)"
       >
-        <h6>
-          AUTOPLAY: OFF
-        </h6>
+        <h6>AUTOPLAY: OFF</h6>
       </button>
+    </div>
+    <div class="section" *ngIf="this.playlistParamId != 0">
+      <h6>PLAYLIST SECTION</h6>
+    </div>
+    <div *ngFor="let i of playlistVideos; let l = index">
+      <app-video-renderer
+        *ngIf="l < lastKeyRelated"
+        [video]="i"
+        [videos]="relatedVideos"
+      ></app-video-renderer>
+    </div>
+    <hr style="margin-top: 10px" *ngIf="this.playlistParamId != 0" />
+    <div class="section">
+      <h6>RELATED SECTION</h6>
     </div>
     <div *ngFor="let i of relatedVideos; let l = index">
       <app-video-renderer

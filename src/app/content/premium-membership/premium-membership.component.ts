@@ -218,7 +218,7 @@ export class PremiumMembershipComponent implements OnInit {
     var differentDate = Math.abs(
       Math.floor((now.getTime() - videoDate.getTime()) / (1000 * 3600 * 24))
     );
-    if (differentDate < 1) {
+    if (differentDate <= 1) {
       this.editDate = 'Today';
     } else if (differentDate <= 6) {
       this.editDate = differentDate + ' days later';

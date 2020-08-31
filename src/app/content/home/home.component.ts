@@ -5,6 +5,15 @@ import { VideoDetailService } from 'src/app/services-only/video-detail.service';
 import { LocationDetailService } from 'src/app/services-only/location-detail.service';
 import { Router } from '@angular/router';
 
+export const getSavedPlaylist = gql`
+  query getSavedPlaylist {
+    savedplays {
+      savedplay_id
+      user_id
+    }
+  }
+`;
+
 export const getVideoQuery = gql`
   query searchHomeVideos($isKid: Boolean!) {
     searchHomeVideosManager(isKid: $isKid) {
@@ -100,6 +109,14 @@ export class HomeComponent implements OnInit {
       })
       .valueChanges.subscribe((result) => {
         this.videoService.playlists = result.data.playlists;
+      });
+
+    this.apollo
+      .watchQuery<any>({
+        query: getSavedPlaylist,
+      })
+      .valueChanges.subscribe((result) => {
+        this.videoService.savedPlaylists = result.data.savedplays;
       });
   }
 

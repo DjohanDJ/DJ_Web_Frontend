@@ -4,7 +4,7 @@ import { Apollo } from 'apollo-angular';
 import gql from 'graphql-tag';
 import { VideoDetailService } from 'src/app/services-only/video-detail.service';
 import { ActivatedRoute, Router, NavigationEnd } from '@angular/router';
-import { getPlaylistQuery } from '../home/home.component';
+import { getPlaylistQuery, getSavedPlaylist } from '../home/home.component';
 
 export const searchUserById = gql`
   query searchUserByID($searchId: Int!) {
@@ -207,7 +207,7 @@ export class PlaylistComponent implements OnInit {
     var differentDate = Math.abs(
       Math.floor((videoDate.getTime() - now.getTime()) / (1000 * 3600 * 24))
     );
-    if (differentDate < 1) {
+    if (differentDate <= 1) {
       this.editDate = 'Today';
     } else if (differentDate <= 6) {
       this.editDate = differentDate + ' days ago';
@@ -887,7 +887,240 @@ export class PlaylistComponent implements OnInit {
   countSubscriber: number;
   currentSubscriber: any = [];
   allSubscribers: any = [];
+
+  //
+
+  openPlaylistModal(index: any) {
+    this.initializeDropdownState();
+    var currentVideo = index;
+    for (let i = 0; i < this.videoService.currentAllVideos.length; i++) {
+      if (this.videoService.currentAllVideos[i] === currentVideo) {
+        // console.log(this.videoService.currentAllVideos[i]);
+        this.videoService.choosenVideoForPlaylist = this.videoService.currentAllVideos[
+          i
+        ].id;
+        break;
+      }
+    }
+    this.changeAddPlaylistState();
+  }
+
+  changeAddPlaylistState() {
+    this.videoService.addPlaylistState = !this.videoService.addPlaylistState;
+    window.scrollTo(0, 0);
+  }
+
+  tempLength: any;
+  saveCurrentPlaylist() {
+    this.tempLength = this.videoService.savedPlaylists?.length;
+    this.apollo
+      .mutate({
+        mutation: insertSavedPlaylist,
+        variables: {
+          saveId: this.playlist.playlist_id,
+          userId: this.userSession.getCurrentUserDB().id,
+        },
+        refetchQueries: [
+          {
+            query: getSavedPlaylist,
+            variables: { repoFullName: 'apollographql/apollo-client' },
+          },
+        ],
+      })
+      .subscribe((result) => {
+        this.apollo
+          .watchQuery<any>({
+            query: getSavedPlaylist,
+          })
+          .valueChanges.subscribe((result) => {
+            this.videoService.savedPlaylists = result.data.savedplays;
+            if (this.tempLength != this.videoService.savedPlaylists?.length) {
+              this.tempLength++;
+              var savedPlaylist = [];
+
+              for (
+                let i = 0;
+                i < this.videoService.savedPlaylists?.length;
+                i++
+              ) {
+                if (
+                  this.videoService.savedPlaylists[i].user_id ==
+                  this.userSession.getCurrentUserDB().id
+                ) {
+                  for (
+                    let j = 0;
+                    j < this.videoService.playlists?.length;
+                    j++
+                  ) {
+                    if (
+                      this.videoService.playlists[j].playlist_id ==
+                      this.videoService.savedPlaylists[i].savedplay_id
+                    ) {
+                      savedPlaylist.push(this.videoService.playlists[j]);
+                      break;
+                    }
+                  }
+                }
+              }
+
+              const allOldPlaylists = [
+                ...this.videoService.distinctPlaylists,
+                ...this.videoService.nextDistinctPlaylists,
+              ];
+              const newOnlyPlaylist = [];
+              for (let i = 0; i < savedPlaylist?.length; i++) {
+                let found = false;
+                for (let j = 0; j < allOldPlaylists?.length; j++) {
+                  // console.log({
+                  //   saved: savedPlaylist[i].playlist_id,
+                  //   old: allOldPlaylists[j].playlist_id,
+                  // });
+                  if (
+                    savedPlaylist[i].playlist_id ===
+                    allOldPlaylists[j].playlist_id
+                  ) {
+                    found = true;
+                  }
+                }
+                if (!found) newOnlyPlaylist.push(savedPlaylist[i]);
+              }
+
+              if (this.videoService.distinctPlaylists.length == 5) {
+                for (let i = 0; i < newOnlyPlaylist.length; i++) {
+                  this.videoService.nextDistinctPlaylists.push(
+                    newOnlyPlaylist[i]
+                  );
+                }
+              } else {
+                for (let i = 0; i < newOnlyPlaylist.length; i++) {
+                  if (this.videoService.distinctPlaylists.length < 5) {
+                    this.videoService.distinctPlaylists.push(
+                      newOnlyPlaylist[i]
+                    );
+                  } else {
+                    this.videoService.nextDistinctPlaylists.push(
+                      newOnlyPlaylist[i]
+                    );
+                  }
+                }
+              }
+            }
+          });
+      });
+  }
+
+  temp2Length: any;
+  deleteCurrentSavedPlaylist() {
+    this.temp2Length = this.videoService.savedPlaylists.length;
+    const playId = this.playlist.playlist_id;
+    const userId = this.playlist.channel_id;
+    this.apollo
+      .mutate({
+        mutation: deleteSavedPlaylist,
+        variables: {
+          saveId: this.playlist.playlist_id,
+          userId: this.userSession.getCurrentUserDB().id,
+        },
+        refetchQueries: [
+          {
+            query: getSavedPlaylist,
+            variables: { repoFullName: 'apollographql/apollo-client' },
+          },
+        ],
+      })
+      .subscribe((result) => {
+        this.apollo
+          .watchQuery<any>({
+            query: getSavedPlaylist,
+          })
+          .valueChanges.subscribe((result) => {
+            this.videoService.savedPlaylists = result.data.savedplays;
+            if (this.temp2Length != this.videoService.savedPlaylists?.length) {
+              this.temp2Length--;
+              var success = false;
+              for (
+                let i = 0;
+                i < this.videoService.distinctPlaylists.length;
+                i++
+              ) {
+                if (
+                  this.videoService.distinctPlaylists[i].playlist_id ==
+                    playId &&
+                  this.videoService.distinctPlaylists[i].channel_id == userId
+                ) {
+                  if (this.videoService.nextDistinctPlaylists.length > 0) {
+                    this.videoService.distinctPlaylists.push(
+                      this.videoService.nextDistinctPlaylists[0]
+                    );
+                    this.videoService.nextDistinctPlaylists.shift();
+                  }
+                  this.videoService.distinctPlaylists.splice(i, 1);
+                  success = true;
+                  break;
+                }
+              }
+
+              if (!success) {
+                for (
+                  let i = 0;
+                  i < this.videoService.nextDistinctPlaylists.length;
+                  i++
+                ) {
+                  if (
+                    this.videoService.nextDistinctPlaylists[i].playlist_id ==
+                      playId &&
+                    this.videoService.nextDistinctPlaylists[i].channel_id ==
+                      userId
+                  ) {
+                    this.videoService.nextDistinctPlaylists.splice(i, 1);
+                    break;
+                  }
+                }
+              }
+            }
+          });
+      });
+  }
+
+  checkSavePlaylist(): boolean {
+    var newPlaylistSideArray = [
+      ...this.videoService.distinctPlaylists,
+      ...this.videoService.nextDistinctPlaylists,
+    ];
+    for (let i = 0; i < this.videoService.savedPlaylists?.length; i++) {
+      // for (let j = 0; j < newPlaylistSideArray.length; j++) {
+      //   if (
+      //     this.videoService.savedPlaylists[i].savedplay_id ==
+      //     newPlaylistSideArray[j].playlist_id
+      //   ) {
+      //     return true;
+      //   }
+      // }
+      if (
+        this.playlist.playlist_id ==
+        this.videoService.savedPlaylists[i].savedplay_id
+      ) {
+        return true;
+      }
+    }
+    return false;
+  }
 }
+
+export const insertSavedPlaylist = gql`
+  mutation insertSavedPlaylist($saveId: ID!, $userId: Int!) {
+    createSavedplay(input: { savedplay_id: $saveId, user_id: $userId }) {
+      savedplay_id
+      user_id
+    }
+  }
+`;
+
+export const deleteSavedPlaylist = gql`
+  mutation deleteSavedPlaylist($saveId: ID!, $userId: Int!) {
+    deleteSavedplay(savedplay_id: $saveId, user_id: $userId)
+  }
+`;
 
 export const insertSubscriber = gql`
   mutation insertSubscriber($channel_id: Int!, $user_id: Int!) {

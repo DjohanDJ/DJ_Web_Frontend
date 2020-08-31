@@ -8,6 +8,7 @@ import { VideoDetailService } from '../services-only/video-detail.service';
 import { LocationDetailService } from '../services-only/location-detail.service';
 import { join } from 'path';
 import { ActivatedRoute } from '@angular/router';
+import { getPlaylistQuery } from '../content/home/home.component';
 
 export const searchUserByEmail = gql`
   query searchUser($searchEmail: String!) {
@@ -306,6 +307,39 @@ export class HeaderComponent implements OnInit {
         }
       }
     }
+
+    var savedPlaylist = [];
+
+    for (let i = 0; i < this.videoService.savedPlaylists?.length; i++) {
+      if (
+        this.videoService.savedPlaylists[i].user_id ==
+        this.userSession.getCurrentUserDB().id
+      ) {
+        for (let j = 0; j < this.videoService.playlists?.length; j++) {
+          if (
+            this.videoService.playlists[j].playlist_id ==
+            this.videoService.savedPlaylists[i].savedplay_id
+          ) {
+            savedPlaylist.push(this.videoService.playlists[j]);
+            break;
+          }
+        }
+      }
+    }
+    // buat save playlist orang
+    if (this.videoService.distinctPlaylists.length == 5) {
+      for (let i = 0; i < savedPlaylist.length; i++) {
+        this.videoService.nextDistinctPlaylists.push(savedPlaylist[i]);
+      }
+    } else {
+      for (let i = 0; i < savedPlaylist.length; i++) {
+        if (this.videoService.distinctPlaylists.length < 5) {
+          this.videoService.distinctPlaylists.push(savedPlaylist[i]);
+        } else {
+          this.videoService.nextDistinctPlaylists.push(savedPlaylist[i]);
+        }
+      }
+    }
   }
 
   currentUserinDB: any;
@@ -537,6 +571,7 @@ export class HeaderComponent implements OnInit {
   closeShareModal() {
     this.videoService.sharingState = false;
     this.videoService.addPlaylistState = false;
+    this.booleanAddNew = false;
   }
 
   onClickSharing() {
@@ -567,7 +602,262 @@ export class HeaderComponent implements OnInit {
     text = 'https://twitter.com/intent/tweet?text=' + text;
     window.open(text, '_blank');
   }
+
+  booleanAddNew: boolean = false;
+  onTypeSearchBoxTitle(value: string) {
+    this.title = value;
+    if (this.title != '') {
+      this.booleanAddNew = true;
+    } else {
+      this.booleanAddNew = false;
+    }
+  }
+
+  maxIndex: number = 0;
+  getNewPlaylistId() {
+    var allPlaylist = this.videoService.playlists;
+    const result = [];
+    const map = new Map();
+    for (const item of allPlaylist) {
+      if (!map.has(item.playlist_id)) {
+        map.set(item.playlist_id, true);
+        result.push(item);
+      }
+    }
+    this.maxIndex = 0;
+    for (let i = 0; i < result.length; i++) {
+      if (Number(result[i].playlist_id) > this.maxIndex) {
+        this.maxIndex = Number(result[i].playlist_id);
+      }
+    }
+    // console.log(allPlaylist);
+    // console.log(result);
+    // console.log(this.maxIndex);
+  }
+
+  title: string = '';
+  tempLength: any;
+  addNewPlaylist() {
+    this.tempLength = this.videoService.playlists.length;
+    // console.log(this.tempLength);
+    this.booleanAddNew = false;
+    // console.log(this.title);
+    var today = new Date();
+    var currentDate =
+      today.getFullYear() +
+      '-' +
+      (today.getMonth() + 1) +
+      '-' +
+      today.getDate();
+
+    this.getNewPlaylistId();
+    this.apollo
+      .mutate({
+        mutation: createPlaylist,
+        variables: {
+          playlist_id: Number(this.maxIndex) + 1,
+          video_id: this.videoService.choosenVideoForPlaylist,
+          channel_id: this.userSession.getCurrentUserDB().id,
+          title: this.title,
+          update_date: currentDate,
+        },
+        refetchQueries: [
+          {
+            query: getPlaylistQuery,
+            variables: { repoFullName: 'apollographql/apollo-client' },
+          },
+        ],
+      })
+      .subscribe((result) => {
+        this.apollo
+          .watchQuery<any>({
+            query: getPlaylistQuery,
+          })
+          .valueChanges.subscribe((result) => {
+            this.videoService.playlists = result.data.playlists;
+            if (this.tempLength != this.videoService.playlists.length) {
+              this.tempLength++;
+              this.videoService.distinctPlaylists.unshift(
+                this.videoService.playlists[
+                  this.videoService.playlists.length - 1
+                ]
+              );
+              if (this.videoService.distinctPlaylists.length > 5) {
+                this.videoService.nextDistinctPlaylists.unshift(
+                  this.videoService.distinctPlaylists[
+                    this.videoService.distinctPlaylists.length - 1
+                  ]
+                );
+                this.videoService.distinctPlaylists.pop();
+              }
+            }
+          });
+      });
+    this.videoService.addPlaylistState = false;
+  }
+
+  addExistPlaylist(playlist) {
+    var today = new Date();
+    var currentDate =
+      today.getFullYear() +
+      '-' +
+      (today.getMonth() + 1) +
+      '-' +
+      today.getDate();
+
+    this.apollo
+      .mutate({
+        mutation: createPlaylist,
+        variables: {
+          playlist_id: playlist.playlist_id,
+          video_id: this.videoService.choosenVideoForPlaylist,
+          channel_id: this.userSession.getCurrentUserDB().id,
+          title: playlist.title,
+          update_date: currentDate.toString(),
+        },
+        refetchQueries: [
+          {
+            query: getPlaylistQuery,
+            variables: { repoFullName: 'apollographql/apollo-client' },
+          },
+        ],
+      })
+      .subscribe((result) => {});
+
+    this.apollo
+      .mutate({
+        mutation: updatePlaylistsDate,
+        variables: {
+          playlist_id: playlist.playlist_id,
+          update_date: currentDate,
+        },
+        refetchQueries: [
+          {
+            query: getPlaylistQuery,
+            variables: { repoFullName: 'apollographql/apollo-client' },
+          },
+        ],
+      })
+      .subscribe((result) => {});
+    this.videoService.addPlaylistState = false;
+    this.managePlaylistPrivate(playlist);
+  }
+
+  checkNextDist: boolean = false;
+
+  managePlaylistPrivate(playlist: any) {
+    var element = null;
+    var element2 = null;
+    if (this.videoService.nextDistinctPlaylists.length == 0) {
+      for (let i = 0; i < this.videoService.distinctPlaylists.length; i++) {
+        if (
+          this.videoService.distinctPlaylists[i].playlist_id ==
+          playlist.playlist_id
+        ) {
+          element = this.videoService.distinctPlaylists[i];
+          this.videoService.distinctPlaylists.splice(i, 1);
+          break;
+        }
+      }
+      this.videoService.distinctPlaylists.unshift(element);
+    } else {
+      for (let i = 0; i < this.videoService.distinctPlaylists.length; i++) {
+        if (
+          this.videoService.distinctPlaylists[i].playlist_id ==
+          playlist.playlist_id
+        ) {
+          element2 = this.videoService.distinctPlaylists[i];
+          this.videoService.distinctPlaylists.splice(i, 1);
+          this.checkNextDist = true;
+          break;
+        }
+      }
+      if (this.checkNextDist) {
+        this.videoService.distinctPlaylists.unshift(element2);
+      }
+      if (!this.checkNextDist) {
+        for (
+          let i = 0;
+          i < this.videoService.nextDistinctPlaylists.length;
+          i++
+        ) {
+          if (
+            this.videoService.nextDistinctPlaylists[i].playlist_id ==
+            playlist.playlist_id
+          ) {
+            element2 = this.videoService.distinctPlaylists[i];
+            this.videoService.distinctPlaylists.splice(i, 1);
+            break;
+          }
+        }
+        this.videoService.distinctPlaylists.unshift(element2);
+      }
+    }
+  }
 }
+
+export const updatePlaylistsDate = gql`
+  mutation updatePlaylistsDate($playlist_id: ID!, $update_date: String!) {
+    updatePlaylistDate(
+      playlist_id: $playlist_id
+      input: {
+        playlist_id: 10000
+        video_id: 0
+        channel_id: 0
+        title: ""
+        description: ""
+        thumbnail: ""
+        update_date: $update_date
+        view_count: 22
+        privacy: "Private"
+      }
+    ) {
+      playlist_id
+      video_id
+      channel_id
+      title
+      description
+      thumbnail
+      update_date
+      view_count
+      privacy
+    }
+  }
+`;
+
+export const createPlaylist = gql`
+  mutation insertPlaylist(
+    $playlist_id: ID!
+    $video_id: Int!
+    $channel_id: Int!
+    $title: String!
+    $update_date: String!
+  ) {
+    createPlaylist(
+      input: {
+        playlist_id: $playlist_id
+        video_id: $video_id
+        channel_id: $channel_id
+        title: $title
+        description: ""
+        thumbnail: ""
+        update_date: $update_date
+        view_count: 10
+        privacy: ""
+      }
+    ) {
+      playlist_id
+      video_id
+      description
+      channel_id
+      title
+      thumbnail
+      update_date
+      view_count
+      privacy
+    }
+  }
+`;
 
 export const getAllSubscriber = gql`
   query getSubscribers {
