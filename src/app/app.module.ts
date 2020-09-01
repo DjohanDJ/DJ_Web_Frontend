@@ -33,6 +33,7 @@ import { SubsciptionsComponent } from './navbar/subsciptions/subsciptions.compon
 import { PlaylistComponent } from './content/playlist/playlist.component';
 import { PlaylistRendererComponent } from './content/playlist-renderer/playlist-renderer.component';
 import { PlaylistRendererLandscapeComponent } from './content/playlist-renderer-landscape/playlist-renderer-landscape.component';
+import { PostChannelComponent } from './content/post-channel/post-channel.component';
 
 @NgModule({
   declarations: [
@@ -59,6 +60,7 @@ import { PlaylistRendererLandscapeComponent } from './content/playlist-renderer-
     PlaylistComponent,
     PlaylistRendererComponent,
     PlaylistRendererLandscapeComponent,
+    PostChannelComponent,
   ],
   imports: [
     BrowserModule,

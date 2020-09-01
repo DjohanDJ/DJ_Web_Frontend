@@ -52,6 +52,8 @@ export const createUser = gql`
         membership: ""
         expired_member: ""
         join_date: ""
+        view_count: 0
+        instagram_link: ""
       }
     ) {
       id
@@ -95,6 +97,8 @@ export const updateUser = gql`
         membership: $membership
         expired_member: $expired_date
         join_date: $join_date
+        view_count: 0
+        instagram_link: ""
       }
     ) {
       id

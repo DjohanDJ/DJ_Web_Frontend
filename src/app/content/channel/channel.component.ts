@@ -15,6 +15,10 @@ export const searchUserById = gql`
       channel_name
       user_image
       channel_banner
+      channel_desc
+      view_count
+      join_date
+      instagram_link
     }
   }
 `;
@@ -41,6 +45,21 @@ export const getAllSubscriber = gql`
       id
       channel_id
       user_id
+    }
+  }
+`;
+
+export const getPosts = gql`
+  query getPosts {
+    posts {
+      post_id
+      channel_id
+      title
+      description
+      image
+      like_count
+      dislike_count
+      date
     }
   }
 `;
@@ -107,6 +126,7 @@ export class ChannelComponent implements OnInit {
 
     this.getSubscriber();
     this.getPlaylist();
+    this.getPost();
   }
 
   userPlaylists: any = [];
@@ -504,5 +524,26 @@ export class ChannelComponent implements OnInit {
     } else {
       this.editViewers = this.temp.toString();
     }
+  }
+
+  allPost: any = [];
+  currentPost: any = [];
+  getPost() {
+    this.apollo
+      .watchQuery<any>({
+        query: getPosts,
+      })
+      .valueChanges.subscribe((result) => {
+        this.allPost = result.data.posts;
+        for (let i = 0; i < this.allPost.length; i++) {
+          if (this.allPost[i].channel_id == this.currentUserParam) {
+            this.currentPost.push(this.allPost[i]);
+          }
+        }
+      });
+  }
+
+  openInstagram() {
+    window.open(this.userFromPickedChannel.instagram_link, '_blank');
   }
 }

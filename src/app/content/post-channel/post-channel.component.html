@@ -1,0 +1,23 @@
+<div class="video-renderer-container">
+  <div class="click-bait-button">
+    <img class="video-image" src="{{ post.image }}" alt="" />
+
+    <div class="description-section">
+      <div class="video-profile">
+        <div class="video-title">
+          {{ post.title }}
+        </div>
+      </div>
+      <div class="profile-section">
+        <div class="video-description">
+          {{ post.like_count }} like • {{ post.dislike_count }} dislike •
+          Uploaded
+          {{ editDate }}
+        </div>
+      </div>
+      <div class="line-description">
+        <h6>{{ post.description }}</h6>
+      </div>
+    </div>
+  </div>
+</div>

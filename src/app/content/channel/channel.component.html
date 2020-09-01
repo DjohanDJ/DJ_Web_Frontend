@@ -181,8 +181,42 @@
         ></app-playlist-renderer>
       </div>
     </div>
-    <div *ngIf="communityState" class="community">this is community</div>
-    <div *ngIf="aboutState" class="about">this is about</div>
+    <div *ngIf="communityState" class="community">
+      <div *ngFor="let i of currentPost" class="second-section">
+        <app-post-channel [post]="i"></app-post-channel>
+      </div>
+    </div>
+    <div *ngIf="aboutState" class="about">
+      <div class="first-section">
+        <div class="sub-header">
+          <h6 class="title">Description</h6>
+        </div>
+        <div class="first-content">
+          <h6>{{ userFromPickedChannel.channel_desc }}</h6>
+        </div>
+      </div>
+      <hr style="margin-top: 10px" />
+      <div class="second-section">
+        <div class="sub-header">
+          <h6 class="title">Channel Stats</h6>
+        </div>
+        <div class="first-content">
+          <h6>Join at {{ userFromPickedChannel.join_date }}</h6>
+        </div>
+        <div class="first-content">
+          <h6>{{ userFromPickedChannel.view_count }} views</h6>
+        </div>
+      </div>
+      <hr style="margin-top: 10px" />
+      <div class="third-section">
+        <div class="sub-header">
+          <h6 class="title">Links</h6>
+        </div>
+        <div (click)="openInstagram()" class="first-content">
+          <h6 style="color: rgb(0, 70, 128)">Instagram</h6>
+        </div>
+      </div>
+    </div>
   </div>
 </div>
 <div class="end-point"></div>
